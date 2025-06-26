@@ -2,22 +2,29 @@
   <header class="py-12 px-4 sm:px-6 lg:px-8">
     <div class="relative mx-auto max-w-[37.5rem] pt-20 text-center pb-20">
       <div class="flex items-center justify-center space-x-3">
-        <img loading="lazy" src="/logo.png" alt="Logspot" class="h-20 w-20" />
+        <img
+          loading="lazy"
+          src="/ajedrezfamaf.jpg"
+          alt="Ajedrez FAMAF"
+          class="h-20 w-20 rounded-full"
+        />
         <h1
           class="text-4xl font-extrabold tracking-tight text-slate-700 sm:text-5xl"
         >
-          logspot
+          Ajedrez FAMAF
         </h1>
       </div>
-      <p class="mt-4 text-base leading-7 text-slate-600">
-        Logspot is an open source change log template made with Nuxt, Vue, and
-        Tailwindcss. Subscribe to our newsletter to get the latest updates or
-        follow us on
+      <p class="mt-6 text-lg leading-8 text-slate-600">
+        Un espacio para compartir novedades, noticias y eventos de la comunidad
+        de ajedrez universitaria.
+      </p>
+
+      <p class="mt-8 text-base leading-7 text-slate-600">
         <a
           class="text-primary underline"
-          href="https://twitter.com/fayazara"
+          href="https://chat.whatsapp.com/ETRrphVKwFnB1AWb5Ld9iB"
           target="_blank"
-          >twitter</a
+          >Unite al grupo de Whatsapp</a
         >.
       </p>
     </div>

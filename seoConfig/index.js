@@ -1,12 +1,11 @@
 export default {
-  title: "Logspot - Opensource changelog template",
-  description:
-    "Logspot is an open source change log template made with Nuxt, Vue, and Tailwindcss.",
+  title: "Ajedrez FAMAF",
+  description: "⚡♟ Web oficial del taller de Ajedrez de FAMAF",
   og: {
-    title: "Logspot - Opensource changelog template",
+    title: "Ajedrez FAMAF",
     description:
-      "Logspot is an open source change log template made with Nuxt, Vue, and Tailwindcss.",
-    image: "https://logspot.vercel.app/logspot-banner.png",
-    url: "https://logspot.vercel.app",
+      "Un espacio para compartir novedades, noticias y eventos de la comunidad de ajedrez universitaria.",
+    // image: "",
+    url: "https://ajedrezfamaf.com",
   },
 };
