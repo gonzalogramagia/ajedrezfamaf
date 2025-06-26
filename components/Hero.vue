@@ -1,15 +1,17 @@
 <template>
   <header class="py-12 px-4 sm:px-6 lg:px-8">
     <div class="relative mx-auto max-w-[37.5rem] pt-20 text-center pb-20">
-      <div class="flex items-center justify-center">
-        <img
-          loading="lazy"
-          src="/ajedrezfamaf.jpg"
-          alt="Ajedrez FAMAF"
-          class="h-20 w-20 rounded-full"
-        />
+      <div class="sm:flex items-center justify-center space-x-3">
+        <div class="flex items-center justify-center">
+          <img
+            loading="lazy"
+            src="/ajedrezfamaf.jpg"
+            alt="Ajedrez FAMAF"
+            class="mb-4 h-20 w-20 rounded-full"
+          />
+        </div>
         <h1
-          class="pl-4 text-4xl font-extrabold tracking-tight text-slate-700 sm:text-5xl"
+          class="text-4xl font-extrabold tracking-tight text-slate-700 sm:text-5xl"
         >
           Ajedrez FAMAF
         </h1>
