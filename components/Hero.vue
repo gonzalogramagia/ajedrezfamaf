@@ -7,7 +7,7 @@
             loading="lazy"
             src="/ajedrezfamaf.jpg"
             alt="Ajedrez FAMAF"
-            class="mb-4 h-20 w-20 rounded-full"
+            class="xs:mb-4 h-20 w-20 rounded-full"
           />
         </div>
         <h1
