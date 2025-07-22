@@ -26,7 +26,7 @@
           class="text-primary underline"
           href="https://chat.whatsapp.com/ETRrphVKwFnB1AWb5Ld9iB"
           target="_blank"
-          >Unite al grupo de Whatsapp</a
+          >Unirme al grupo de Whatsapp</a
         >.
       </p>
     </div>
