@@ -1,6 +1,6 @@
 <template>
   <header class="py-12 px-4 sm:px-6 lg:px-8">
-    <div class="relative mx-auto max-w-[37.5rem] pt-20 text-center pb-20">
+    <div class="relative mx-auto max-w-[37.5rem] pt-20 text-center pb-8">
       <div class="sm:flex items-center justify-center space-x-3">
         <div class="flex items-center justify-center">
           <img

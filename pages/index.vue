@@ -9,7 +9,7 @@
     </section>
     
     <!-- Enlace de Instagram -->
-    <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+    <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
       <div class="text-center">
         <a
           class="inline-flex items-center text-primary underline hover:text-primary/80 transition-colors text-lg"
