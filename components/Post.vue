@@ -11,7 +11,12 @@
         class="absolute -top-6 right-0 md:static mb-4"
       />
       <h1 v-if="content.title" class="text-xl sm:text-3xl font-bold mb-4">
-        {{ content.title }}
+        <NuxtLink 
+          :to="`/posts/${getPostSlug(content._file)}`"
+          class="hover:text-primary transition-colors"
+        >
+          {{ content.title }}
+        </NuxtLink>
       </h1>
       <ContentRenderer :value="content" class="document" />
       <Authors v-if="content.authors" :authors="content.authors" />
@@ -23,6 +28,19 @@
 const props = defineProps({
   content: Object,
 });
+
+// Función para generar el slug del post sin el número
+const getPostSlug = (filePath) => {
+  if (!filePath) return '';
+  
+  // Extraer el nombre del archivo sin la extensión
+  const fileName = filePath.split('/').pop().replace('.md', '');
+  
+  // Remover el número al inicio y el punto
+  const slug = fileName.replace(/^\d+\./, '');
+  
+  return slug;
+};
 </script>
 
 <style>
