@@ -12,7 +12,7 @@
     <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
       <div class="text-center">
         <a
-          class="inline-flex items-center text-primary underline hover:text-primary/80 transition-colors text-lg"
+          class="inline-flex items-center text-primary hover:text-primary/80 transition-colors text-lg"
           href="https://www.instagram.com/ajedrezfamaf"
           target="_blank"
           rel="noopener noreferrer"

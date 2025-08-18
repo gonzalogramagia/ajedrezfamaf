@@ -12,7 +12,7 @@
       />
       <h1 v-if="content.title" class="text-xl sm:text-3xl font-bold mb-4">
         <NuxtLink 
-          :to="`/posts/${getPostSlug(content._file)}`"
+          :to="`/${getPostSlug(content._file)}`"
           class="hover:text-primary transition-colors"
         >
           {{ content.title }}
