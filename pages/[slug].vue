@@ -1,11 +1,26 @@
 <template>
   <main class="min-h-screen relative">
     <!-- Header con logo y título -->
-    <header class="bg-black text-white py-8">
-      <div class="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-center">
-          <img src="/ajedrezfamaf.jpg" alt="Logo Ajedrez FAMAF" class="w-16 h-16 mr-4 rounded-lg" />
-          <h1 class="text-3xl font-bold text-white">Ajedrez FAMAF</h1>
+    <header class="py-12 px-4 sm:px-6 lg:px-8">
+      <div class="relative mx-auto max-w-[37.5rem] pt-20 text-center pb-8">
+        <div class="sm:flex items-center justify-center space-x-3">
+          <div class="flex items-center justify-center">
+            <NuxtLink to="/">
+              <img
+                loading="lazy"
+                src="/ajedrezfamaf.jpg"
+                alt="Ajedrez FAMAF"
+                class="xs:mb-4 h-20 w-20 rounded-full hover:opacity-80 transition-opacity cursor-pointer"
+              />
+            </NuxtLink>
+          </div>
+          <NuxtLink to="/" class="hover:opacity-80 transition-opacity">
+            <h1
+              class="text-4xl font-extrabold tracking-tight text-slate-700 sm:text-5xl cursor-pointer"
+            >
+              Ajedrez FAMAF
+            </h1>
+          </NuxtLink>
         </div>
       </div>
     </header>
