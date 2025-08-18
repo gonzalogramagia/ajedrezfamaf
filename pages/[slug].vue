@@ -1,10 +1,12 @@
 <template>
   <main class="min-h-screen relative">
     <!-- Header con logo y título -->
-    <header class="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 mt-8">
-      <div class="flex items-center justify-center mb-8">
-        <img src="/logo.svg" alt="Logo Ajedrez FAMAF" class="w-12 h-12 mr-4" />
-        <h1 class="text-3xl font-bold text-primary">Ajedrez FAMAF</h1>
+    <header class="bg-black text-white py-8">
+      <div class="relative mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-center">
+          <img src="/ajedrezfamaf.jpg" alt="Logo Ajedrez FAMAF" class="w-16 h-16 mr-4 rounded-lg" />
+          <h1 class="text-3xl font-bold text-white">Ajedrez FAMAF</h1>
+        </div>
       </div>
     </header>
     
