@@ -121,7 +121,9 @@ const { data: post } = await useAsyncData(`post-${slug}`, async () => {
 // Función para copiar la URL
 const copyUrl = async () => {
   try {
-    await navigator.clipboard.writeText(window.location.href);
+    // Obtener solo la URL base sin parámetros
+    const baseUrl = window.location.origin + window.location.pathname;
+    await navigator.clipboard.writeText(baseUrl);
     copied.value = true;
     setTimeout(() => {
       copied.value = false;
