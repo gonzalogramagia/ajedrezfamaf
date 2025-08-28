@@ -1,20 +1,24 @@
 <template>
-  <header class="py-12 px-4 sm:px-6 lg:px-8">
-    <div class="relative mx-auto max-w-[37.5rem] pt-20 text-center pb-8">
-      <div class="sm:flex items-center justify-center space-x-3">
+  <header class="py-10 sm:py-12 px-4 sm:px-6 lg:px-8">
+    <div class="relative mx-auto max-w-[37.5rem] pt-18 sm:pt-20 text-center pb-8">
+      <div class="sm:flex items-center justify-center space-x-4 sm:space-x-3">
         <div class="flex items-center justify-center">
-          <img
-            loading="lazy"
-            src="/ajedrezfamaf.jpg"
-            alt="Ajedrez FAMAF"
-            class="xs:mb-4 h-20 w-20 rounded-full"
-          />
+          <NuxtLink to="/">
+            <img
+              loading="lazy"
+              src="/ajedrezfamaf.jpg"
+              alt="Ajedrez FAMAF"
+              class="xs:mb-4 h-20 w-20 rounded-full"
+            />
+          </NuxtLink>
         </div>
-        <h1
-          class="text-4xl font-extrabold tracking-tight text-slate-700 sm:text-5xl"
-        >
-          Ajedrez FAMAF
-        </h1>
+        <NuxtLink to="/">
+          <h1
+            class="text-4xl font-extrabold tracking-tight text-slate-700 sm:text-5xl"
+          >
+            Ajedrez FAMAF
+          </h1>
+        </NuxtLink>
       </div>
       <p class="mt-6 text-lg leading-8 text-slate-600">
         Un espacio para compartir novedades, noticias y eventos de la comunidad
