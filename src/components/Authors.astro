@@ -1,0 +1,18 @@
+---
+export interface Props {
+  authors: Array<{ avatar: string }>;
+}
+
+const { authors } = Astro.props;
+---
+
+<div class="flex -space-x-2 relative z-0 overflow-hidden mt-6">
+  {authors.map((author, i) => (
+    <img
+      class="relative inline-block h-8 w-8 rounded-full ring-2 ring-white"
+      style={`z-index: ${authors.length - i}`}
+      src={author.avatar}
+      alt=""
+    />
+  ))}
+</div>

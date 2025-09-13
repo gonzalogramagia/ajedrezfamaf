@@ -1,0 +1,78 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StaticHero from '../components/StaticHero.astro';
+import InstagramFloatingButton from '../components/InstagramFloatingButton.astro';
+import Badge from '../components/Badge.astro';
+import Authors from '../components/Authors.astro';
+
+const seoConfig = {
+  title: "Ajedrez FAMAF",
+  description: "⚡♟ Web oficial del taller de Ajedrez de FAMAF",
+  og: {
+    title: "Ajedrez FAMAF",
+    description: "Un espacio para compartir novedades, noticias y eventos de la comunidad de ajedrez universitaria.",
+    url: "https://ajedrezfamaf.com",
+  },
+};
+
+// Obtener todos los posts
+const posts = await Astro.glob('../content/posts/*.md');
+
+// Ordenar por fecha (más antiguos primero)
+const sortedPosts = posts.sort((a, b) => {
+  const aNum = parseInt(a.file.split('/').pop().split('.')[0]);
+  const bNum = parseInt(b.file.split('/').pop().split('.')[0]);
+  return aNum - bNum; // aNum - bNum para más antiguos primero
+});
+---
+
+<Layout title={seoConfig.title} description={seoConfig.description}>
+  <main class="min-h-screen relative">
+    <StaticHero />
+    <InstagramFloatingButton />
+    <section
+      class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden"
+    >
+      {sortedPosts.map((post) => (
+        <article class="md:flex">
+          <h2 class="content-date h-full mt-px">
+            <a href="#2022-06-23">{post.frontmatter.date}</a>
+          </h2>
+          <div class="content-block">
+            <div class="feed-border"></div>
+            <div class="feed-dot"></div>
+            <div class="mb-6">
+              <Badge label={post.frontmatter.version} />
+            </div>
+            <h1 class="text-xl sm:text-3xl font-bold mb-4">
+              <a 
+                href={`/${post.file.split('/').pop().replace('.md', '').replace(/^\d+\./, '')}`}
+                class="hover:text-primary transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {post.frontmatter.title}
+              </a>
+            </h1>
+            <div class="document" set:html={post.compiledContent()} />
+            {post.frontmatter.authors && <Authors authors={post.frontmatter.authors} />}
+          </div>
+        </article>
+      ))}
+    </section>
+    
+    <!-- Footer con Gonza -->
+    <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
+      <div class="text-center">
+        <a
+          class="inline-flex items-center text-yellow-500 hover:shadow-text transition-all text-lg"
+          href="https://gonza.gr"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          💻 🧉 Desarrollado por Gonza
+        </a>
+      </div>
+    </section>
+  </main>
+</Layout>
