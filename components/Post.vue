@@ -59,4 +59,8 @@ const getPostSlug = (filePath) => {
 .document {
   @apply max-w-none prose-h3:mb-4 prose-h3:text-base prose-h3:leading-6 prose-sm prose prose-pre:text-base prose-slate prose-a:font-semibold prose-a:text-primary hover:prose-a:text-sky-600;
 }
+
+.document a[href^="http"] {
+  target: _blank;
+}
 </style>

@@ -30,6 +30,7 @@
           class="text-primary underline"
           href="https://chat.whatsapp.com/ETRrphVKwFnB1AWb5Ld9iB"
           target="_blank"
+          rel="noopener noreferrer"
           >Unirme al grupo de Whatsapp</a
         >.
       </p>

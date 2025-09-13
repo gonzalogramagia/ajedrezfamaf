@@ -40,7 +40,7 @@
         
         <Authors v-if="post.authors" :authors="post.authors" />
         
-        <div class="mt-12 pt-8 border-t border-gray-200 flex items-center justify-between">
+        <div class="mt-16 pt-8 border-t border-gray-200 flex items-center justify-between">
           <NuxtLink 
             to="/" 
             class="inline-flex items-center text-primary hover:text-primary/80 transition-colors"
@@ -79,16 +79,16 @@
       </div>
     </div>
     
-    <!-- Footer con Moovimiento -->
-    <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Footer con Gonza -->
+    <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8 mt-8">
       <div class="text-center">
         <a
-          class="inline-flex items-center text-primary hover:text-primary/80 transition-colors text-lg"
-          href="https://moovimiento.com"
+          class="inline-flex items-center text-yellow-500 hover:shadow-text transition-all text-lg"
+          href="https://gonza.gr"
           target="_blank"
           rel="noopener noreferrer"
         >
-          ⚡ Powered by Moovimiento
+          💻 🧉 Desarrollado por Gonza
         </a>
       </div>
     </section>
@@ -145,5 +145,13 @@ useHead({
 <style>
 .document {
   @apply max-w-none prose-h3:mb-4 prose-h3:text-base prose-h3:leading-6 prose-sm prose prose-pre:text-base prose-slate prose-a:font-semibold prose-a:text-primary hover:prose-a:text-sky-600;
+}
+
+.document a[href^="http"] {
+  target: _blank;
+}
+
+.hover\:shadow-text:hover {
+  transform: scale(1.01);
 }
 </style>

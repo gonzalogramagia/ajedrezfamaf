@@ -8,16 +8,16 @@
       <post v-for="post in data" :content="post" />
     </section>
     
-    <!-- Footer con Moovimiento -->
+    <!-- Footer con Gonza -->
     <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
       <div class="text-center">
         <a
-          class="inline-flex items-center text-primary hover:text-primary/80 transition-colors text-lg"
-          href="https://moovimiento.com"
+          class="inline-flex items-center text-yellow-500 hover:shadow-text transition-all text-lg"
+          href="https://gonza.gr"
           target="_blank"
           rel="noopener noreferrer"
         >
-          ⚡ Powered by Moovimiento
+          💻 🧉 Desarrollado por Gonza
         </a>
       </div>
     </section>
@@ -44,3 +44,9 @@ const { data } = await useAsyncData("feed", () =>
   queryContent("/posts").find()
 );
 </script>
+
+<style>
+.hover\:shadow-text:hover {
+  transform: scale(1.01);
+}
+</style>
