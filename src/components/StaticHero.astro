@@ -2,35 +2,33 @@
 // Componente estático para evitar hidratación
 ---
 
-<header class="py-10 sm:py-12 px-4 sm:px-6 lg:px-8">
-  <div class="relative mx-auto max-w-[37.5rem] pt-18 sm:pt-20 text-center pb-8">
-    <div class="sm:flex items-center justify-center space-x-4 sm:space-x-3">
-      <div class="flex items-center justify-center">
+<header class="hero-header">
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-logo">
         <a href="/">
           <img
             loading="lazy"
             src="/ajedrezfamaf.jpg"
             alt="Ajedrez FAMAF"
-            class="xs:mb-4 h-20 w-20 rounded-full"
+            class="hero-image"
           />
         </a>
       </div>
       <a href="/">
-        <h1
-          class="mega-bold tracking-tight text-slate-700"
-        >
+        <h1 class="hero-title">
           Ajedrez FAMAF
         </h1>
       </a>
     </div>
-    <p class="mt-6 text-lg leading-8 text-slate-600">
+    <p class="hero-description">
       Un espacio para compartir novedades, noticias y eventos de<br>
       la comunidad de ajedrez universitaria.
     </p>
 
-    <p class="mt-8 text-base leading-7 text-slate-600">
+    <p class="hero-whatsapp">
       <a
-        class="text-primary hover:text-primary/80 transition-colors font-semibold"
+        class="whatsapp-link"
         href="https://chat.whatsapp.com/ETRrphVKwFnB1AWb5Ld9iB"
         target="_blank"
         rel="noopener noreferrer"
@@ -39,3 +37,125 @@
     </p>
   </div>
 </header>
+
+<style>
+  .hero-header {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-header {
+      padding-top: 3rem;
+      padding-bottom: 3rem;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-header {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .hero-container {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 37.5rem;
+    padding-top: 4.5rem;
+    text-align: center;
+    padding-bottom: 2rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-container {
+      padding-top: 5rem;
+    }
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-content {
+      flex-direction: row;
+      gap: 0.75rem;
+    }
+  }
+
+  .hero-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-image {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .hero-image {
+      margin-bottom: 0;
+    }
+  }
+
+  .hero-title {
+    font-weight: 900 !important;
+    font-size: 3rem !important;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 0.9;
+    color: #334155;
+    margin: 0;
+  }
+
+  @media (min-width: 640px) {
+    .hero-title {
+      font-size: 3.5rem !important;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-title {
+      font-size: 4rem !important;
+    }
+  }
+
+  .hero-description {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 2rem;
+    color: #475569;
+  }
+
+  .hero-whatsapp {
+    margin-top: 2rem;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    color: #475569;
+  }
+
+  .whatsapp-link {
+    color: #0ea5e9;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .whatsapp-link:hover {
+    color: #0284c7;
+  }
+</style>
