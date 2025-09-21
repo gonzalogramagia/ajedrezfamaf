@@ -22,7 +22,7 @@
       </a>
     </div>
     <p class="hero-description">
-      Un espacio para compartir novedades, noticias y eventos de<br>
+      Un espacio para compartir novedades, noticias y eventos de<br class="mobile-hidden">
       la comunidad de ajedrez universitaria.
     </p>
 
@@ -42,8 +42,8 @@
   .hero-header {
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
   }
 
   @media (min-width: 640px) {
@@ -157,5 +157,12 @@
 
   .whatsapp-link:hover {
     color: #0284c7;
+  }
+
+  /* Ocultar el br en mobile */
+  @media (max-width: 768px) {
+    .mobile-hidden {
+      display: none;
+    }
   }
 </style>
