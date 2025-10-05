@@ -1,0 +1,11 @@
+{
+  "name": "ajedrezfamaf-api",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
+    "dotenv": "^17.2.3",
+    "parse-multipart-data": "^1.5.0",
+    "uuid": "^9.0.0"
+  }
+}
