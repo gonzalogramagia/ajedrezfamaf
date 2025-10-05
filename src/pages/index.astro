@@ -6,6 +6,7 @@ import Badge from '../components/Badge.astro';
 import Authors from '../components/Authors.astro';
 import { getAllPosts } from '../lib/posts';
 import { parseMarkdown } from '../lib/markdown';
+import { getImageUrl } from '../lib/storage';
 
 const seoConfig = {
   title: "Ajedrez FAMAF",
@@ -17,15 +18,22 @@ const seoConfig = {
   },
 };
 
-// Obtener todos los posts desde Supabase
-const posts = await getAllPosts();
+// Función para convertir fecha YYYY-MM-DD a formato español
+function formatDateToSpanish(dateString: string): string {
+  const date = new Date(dateString);
+  const months = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  
+  return `${day} de ${month}`;
+}
 
-// Ordenar por fecha (más antiguos primero)
-const sortedPosts = posts.sort((a, b) => {
-  const aNum = parseInt(a.slug.split('.')[0]);
-  const bNum = parseInt(b.slug.split('.')[0]);
-  return aNum - bNum; // aNum - bNum para más antiguos primero
-});
+// Obtener todos los posts desde Supabase (ya ordenados por el campo 'order')
+const posts = await getAllPosts();
 ---
 
 <Layout title={seoConfig.title} description={seoConfig.description}>
@@ -35,11 +43,11 @@ const sortedPosts = posts.sort((a, b) => {
     <section
       class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
-      {sortedPosts.map((post) => (
+      {posts.map((post) => (
         <article class="md:flex">
-          <h2 class="content-date h-full mt-px">
-            <a href="#2022-06-23">{post.date}</a>
-          </h2>
+                 <h2 class="content-date h-full mt-px">
+                   <a href="#2022-06-23">{formatDateToSpanish(post.date)}</a>
+                 </h2>
           <div class="content-block">
             <div class="feed-border"></div>
             <div class="feed-dot"></div>
@@ -48,13 +56,24 @@ const sortedPosts = posts.sort((a, b) => {
             </div>
             <h1 class="text-xl sm:text-3xl font-bold mb-4">
               <a 
-                href={`/${post.slug ? post.slug.replace(/^\d+\./, '') : '#'}`}
+                href={`/${post.slug || '#'}`}
                 class="hover:text-primary transition-colors"
               >
                 {post.title}
               </a>
             </h1>
-            <div class="document" set:html={parseMarkdown(post.content, `/${post.slug ? post.slug.replace(/^\d+\./, '') : '#'}`)} />
+            <div class="document" set:html={parseMarkdown(post.content, `/${post.slug || '#'}`)} />
+            {post.featured_image && (
+              <div class="mt-6">
+                <a href={`/${post.slug || '#'}`}>
+                  <img 
+                    src={getImageUrl(post.featured_image)} 
+                    alt={post.title}
+                    class="w-full h-96 md:h-[32rem] object-cover rounded-lg hover:opacity-90 transition-opacity"
+                  />
+                </a>
+              </div>
+            )}
           </div>
         </article>
       ))}

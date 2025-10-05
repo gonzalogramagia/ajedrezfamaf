@@ -1,10 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { getAllPosts } from '../lib/posts';
+import { getImageUrl } from '../lib/storage';
 
 const seoConfig = {
   title: "Panel de Administración - Ajedrez FAMAF",
   description: "Panel de administración para gestionar torneos y posts",
 };
+
+// Cargar posts desde Supabase
+// Función para convertir fecha YYYY-MM-DD a formato español
+function formatDateToSpanish(dateString: string): string {
+  const date = new Date(dateString);
+  const months = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+  
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  
+  return `${day} de ${month}`;
+}
+
+const posts = await getAllPosts();
 ---
 
 <Layout title={seoConfig.title} description={seoConfig.description}>
@@ -140,15 +159,193 @@ const seoConfig = {
           <!-- Posts List -->
           <div class="bg-white shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 sm:p-6">
-              <p class="text-gray-500">
-                Aquí se mostrarán los posts cuando esté conectado a la base de datos.
-              </p>
+              <div class="space-y-4" id="admin-posts-list">
+                {posts.map((post) => (
+                  <div class="border border-gray-200 rounded-lg p-4 flex items-start space-x-4" data-post-id={post.id}>
+                    <div class="flex-1">
+                      <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                        <a 
+                          href={`/${post.slug}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="text-blue-600 hover:text-blue-800 hover:underline"
+                        >
+                          {post.title}
+                        </a>
+                      </h4>
+                           <p class="text-gray-600 text-sm mb-2">
+                             Fecha: {formatDateToSpanish(post.date)}
+                           </p>
+                      <p class="text-gray-600 text-sm mb-2">
+                        Slug: {post.slug}
+                      </p>
+                      <p class="text-gray-500 text-sm">
+                        {post.content.substring(0, 100)}...
+                      </p>
+                    </div>
+                    <div class="flex space-x-2">
+                      <button 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm edit-post-btn"
+                        data-post-id={post.id}
+                      >
+                        Editar
+                      </button>
+                      <button 
+                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm delete-post-btn admin-only"
+                        data-post-id={post.id}
+                        data-post-title={post.title}
+                        title="Solo disponible para administradores"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
       </div>
       </section>
     </main>
+
+    <!-- Post Editor Modal -->
+    <div id="post-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+          <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <h3 class="text-xl font-semibold text-gray-900" id="modal-title">
+              Crear Nuevo Post
+            </h3>
+            <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            <form id="post-form" class="space-y-6">
+              <input type="hidden" id="post-id" name="postId" />
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="post-title" class="block text-sm font-medium text-gray-700 mb-2">
+                    Título del Post
+                  </label>
+                  <input
+                    type="text"
+                    id="post-title"
+                    name="title"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Ingresa el título del post"
+                  />
+                </div>
+                
+                <div>
+                  <label for="post-slug" class="block text-sm font-medium text-gray-700 mb-2">
+                    Slug (URL)
+                  </label>
+                  <input
+                    type="text"
+                    id="post-slug"
+                    name="slug"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="torneo-septiembre-2022"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="post-date" class="block text-sm font-medium text-gray-700 mb-2">
+                    Fecha
+                  </label>
+                  <input
+                    type="date"
+                    id="post-date"
+                    name="date"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                
+                <div>
+                  <label for="post-version" class="block text-sm font-medium text-gray-700 mb-2">
+                    Versión
+                  </label>
+                  <input
+                    type="text"
+                    id="post-version"
+                    name="version"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="v1.0"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="post-content" class="block text-sm font-medium text-gray-700 mb-2">
+                  Contenido (Markdown)
+                </label>
+                <textarea
+                  id="post-content"
+                  name="content"
+                  rows="15"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                  placeholder="Escribe el contenido del post en Markdown..."
+                ></textarea>
+                <p class="text-sm text-gray-500 mt-2">
+                  Puedes usar Markdown para formatear el contenido. Las imágenes se subirán automáticamente a Supabase Storage.
+                </p>
+              </div>
+
+              <div>
+                <label for="post-featured-image" class="block text-sm font-medium text-gray-700 mb-2">
+                  <span id="featured-image-label">Imagen de Portada</span>
+                  <span id="featured-image-optional" class="text-gray-500">(opcional)</span>
+                </label>
+                <input
+                  type="text"
+                  id="post-featured-image"
+                  name="featured_image"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Ruta de la imagen (ej: /imagen.jpg)"
+                />
+                <div id="featured-image-preview" class="mt-2 hidden">
+                  <p class="text-xs text-gray-500 mb-1">Imagen actual:</p>
+                  <img id="preview-img" class="w-32 h-20 object-cover rounded border" alt="Preview" />
+                </div>
+                <p class="text-sm text-gray-500 mt-2">
+                  <span id="featured-image-help">Ruta de la imagen de portada</span>
+                </p>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
+            <button
+              type="button"
+              id="cancel-modal"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              id="save-post"
+              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+            >
+              Guardar Post
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-gray-900 border-t border-gray-700 py-8 mt-auto">
@@ -216,6 +413,12 @@ const seoConfig = {
     const createTournamentBtn = document.getElementById('create-tournament-btn');
     const createPostBtn = document.getElementById('create-post-btn');
     
+    // Ocultar/mostrar botones de eliminar basado en el rol
+    const deleteButtons = document.querySelectorAll('.delete-post-btn');
+    deleteButtons.forEach(btn => {
+      btn.style.display = role === 'admin' ? 'block' : 'none';
+    });
+    
     switch(role) {
       case 'admin':
         title.textContent = 'Ajedrez FAMAF - Admin';
@@ -229,8 +432,10 @@ const seoConfig = {
         break;
       case 'colega':
         title.textContent = 'Ajedrez FAMAF - Colega';
-        createTournamentBtn.style.display = 'none';
+        createTournamentBtn.style.display = 'block';
         createPostBtn.style.display = 'none';
+        // Redirect to colega page with admin privileges
+        window.location.href = '/colega?admin=true';
         break;
     }
   }
@@ -268,12 +473,214 @@ const seoConfig = {
   });
 
   document.getElementById('create-post-btn').addEventListener('click', function() {
-    alert('Funcionalidad de crear post - pendiente de implementar con base de datos');
+    modalTitle.textContent = 'Crear Nuevo Post';
+    postForm.reset();
+    document.getElementById('post-id').value = '';
+    modal.classList.remove('hidden');
   });
+
+  // Delete post functionality
+  document.addEventListener('click', async function(e) {
+    if (e.target.classList.contains('delete-post-btn')) {
+      const postId = e.target.dataset.postId;
+      const postTitle = e.target.dataset.postTitle;
+      
+      if (confirm(`¿Estás seguro de que quieres eliminar el post "${postTitle}"? Esta acción no se puede deshacer.`)) {
+        try {
+          const response = await fetch(`/api/posts/${postId}`, {
+            method: 'DELETE'
+          });
+
+          if (response.ok) {
+            // Remove the post element from the DOM
+            const postElement = document.querySelector(`[data-post-id="${postId}"]`);
+            if (postElement) {
+              postElement.remove();
+            }
+            alert('Post eliminado exitosamente');
+          } else {
+            throw new Error('Error al eliminar el post');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al eliminar el post. Intenta nuevamente.');
+        }
+      }
+    }
+  });
+
+  // Modal functionality
+  const modal = document.getElementById('post-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const postForm = document.getElementById('post-form');
+  const closeModal = document.getElementById('close-modal');
+  const cancelModal = document.getElementById('cancel-modal');
+
+  // Close modal
+  [closeModal, cancelModal].forEach(btn => {
+    btn.addEventListener('click', function() {
+      modal.classList.add('hidden');
+    });
+  });
+
+  // Close modal when clicking outside
+  modal.addEventListener('click', function(e) {
+    if (e.target === modal) {
+      modal.classList.add('hidden');
+    }
+  });
+
+  // Edit post functionality
+  document.addEventListener('click', async function(e) {
+    if (e.target.classList.contains('edit-post-btn')) {
+      const postId = e.target.dataset.postId;
+      
+      try {
+        // Show loading state
+        modalTitle.textContent = 'Cargando...';
+        modal.classList.remove('hidden');
+        
+        // Fetch post data
+        const response = await fetch(`/api/posts/${postId}`);
+        
+        if (response.ok) {
+          const post = await response.json();
+          
+          // Fill form with existing data
+          document.getElementById('post-id').value = post.id;
+          document.getElementById('post-title').value = post.title;
+          document.getElementById('post-slug').value = post.slug;
+          
+          // Convert date to YYYY-MM-DD format for date input
+          let dateValue = '';
+          console.log('Original date from post:', post.date, 'Type:', typeof post.date);
+          
+          if (typeof post.date === 'string') {
+            // Check if it's already in YYYY-MM-DD format
+            if (/^\d{4}-\d{2}-\d{2}$/.test(post.date)) {
+              dateValue = post.date;
+              console.log('Date already in correct format:', dateValue);
+            } else {
+              // Try to parse the date string
+              try {
+                const dateObj = new Date(post.date);
+                if (!isNaN(dateObj.getTime())) {
+                  dateValue = dateObj.toISOString().split('T')[0];
+                  console.log('Parsed date:', dateValue);
+                } else {
+                  console.warn('Invalid date object:', post.date);
+                  // Use today's date as fallback
+                  dateValue = new Date().toISOString().split('T')[0];
+                }
+              } catch (error) {
+                console.error('Error parsing date:', error);
+                // Use today's date as fallback
+                dateValue = new Date().toISOString().split('T')[0];
+              }
+            }
+          } else {
+            console.warn('Date is not a string:', post.date);
+            // Use today's date as fallback
+            dateValue = new Date().toISOString().split('T')[0];
+          }
+          
+          console.log('Final date value:', dateValue);
+          document.getElementById('post-date').value = dateValue;
+          
+          document.getElementById('post-version').value = post.version;
+          document.getElementById('post-content').value = post.content;
+          
+          // Manejar imagen de portada
+          const featuredImageInput = document.getElementById('post-featured-image');
+          const featuredImagePreview = document.getElementById('featured-image-preview');
+          const previewImg = document.getElementById('preview-img');
+          const featuredImageOptional = document.getElementById('featured-image-optional');
+          const featuredImageHelp = document.getElementById('featured-image-help');
+          
+          if (post.featured_image) {
+            featuredImageInput.value = post.featured_image;
+            previewImg.src = getImageUrl(post.featured_image);
+            featuredImagePreview.classList.remove('hidden');
+            featuredImageOptional.textContent = '(opcional)';
+            featuredImageHelp.textContent = 'Actualizar imagen de portada';
+          } else {
+            featuredImageInput.value = '';
+            featuredImagePreview.classList.add('hidden');
+            featuredImageOptional.textContent = '(requerida)';
+            featuredImageHelp.textContent = 'Ruta de la imagen de portada';
+          }
+          
+          modalTitle.textContent = 'Editar Post';
+        } else {
+          throw new Error('Error al cargar el post');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        modal.classList.add('hidden');
+        alert('Error al cargar el post. Intenta nuevamente.');
+      }
+    }
+  });
+
+  // Save post functionality
+  document.getElementById('save-post').addEventListener('click', async function() {
+    const formData = new FormData(postForm);
+    const postId = document.getElementById('post-id').value;
+    const isEditing = postId !== '';
+
+    const postData = {
+      title: formData.get('title'),
+      slug: formData.get('slug'),
+      date: formData.get('date'),
+      version: formData.get('version'),
+      content: formData.get('content')
+    };
+
+    // Validar slug reservado en frontend
+    const reservedSlugs = ['torneos', 'admin', 'editor', 'colega']
+    if (reservedSlugs.includes(postData.slug.toLowerCase())) {
+      alert('Error: Este slug está reservado para rutas del sistema. Por favor usa otro slug.');
+      return;
+    }
+
+    try {
+      // Show loading state
+      this.textContent = 'Guardando...';
+      this.disabled = true;
+
+      // Create or update post
+      const url = '/api/posts' + (isEditing ? `/${postId}` : '');
+      const method = isEditing ? 'PUT' : 'POST';
+      
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData)
+      });
+
+      if (response.ok) {
+        // Success - reload the page to show updated posts
+        window.location.reload();
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al guardar el post');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al guardar el post: ' + error.message);
+    } finally {
+      this.textContent = 'Guardar Post';
+      this.disabled = false;
+    }
+  });
+
 </script>
 
 <style>
   .tab-button.active {
     @apply border-blue-500 text-blue-600;
   }
+  
 </style>

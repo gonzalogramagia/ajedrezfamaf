@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS posts (
   version TEXT NOT NULL,
   content TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
+  featured_image TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

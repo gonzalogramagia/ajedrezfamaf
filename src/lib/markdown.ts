@@ -32,7 +32,11 @@ export function parseMarkdown(markdown: string, postUrl?: string): string {
         return `<div style="color: red; font-style: italic;">[Imagen no válida]</div>`
       }
       
-      const imageUrl = getImageUrl(src)
+      // Si la imagen ya es una URL completa de Supabase, usarla directamente
+      let imageUrl = src
+      if (!src.startsWith('http')) {
+        imageUrl = getImageUrl(src)
+      }
       
       if (!imageUrl) {
         return `<div style="color: red; font-style: italic;">[Imagen no encontrada: ${src}]</div>`
