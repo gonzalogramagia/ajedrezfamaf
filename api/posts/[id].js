@@ -16,11 +16,23 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
 })
 
 exports.handler = async (event, context) => {
-  const { id } = event.pathParameters || {}
+  console.log('Event:', JSON.stringify(event, null, 2))
+  
+  // Extraer el ID de la URL
+  const urlPath = event.path || event.rawPath || ''
+  const pathParts = urlPath.split('/')
+  const id = pathParts[pathParts.length - 1]
+  
+  console.log('URL Path:', urlPath)
+  console.log('Extracted ID:', id)
   
   if (!id) {
     return {
       statusCode: 400,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      },
       body: JSON.stringify({ error: 'Post ID is required' })
     }
   }
@@ -28,19 +40,29 @@ exports.handler = async (event, context) => {
   try {
     // GET - Obtener post por ID
     if (event.httpMethod === 'GET') {
+      console.log('GET request for post ID:', id)
+      
       const { data, error } = await supabaseAdmin
         .from('posts')
         .select('*')
         .eq('id', id)
         .single()
 
+      console.log('Supabase response:', { data, error })
+
       if (error) {
+        console.error('Supabase error:', error)
         return {
           statusCode: 404,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          },
           body: JSON.stringify({ error: error.message })
         }
       }
 
+      console.log('Returning post data:', data)
       return {
         statusCode: 200,
         headers: {
