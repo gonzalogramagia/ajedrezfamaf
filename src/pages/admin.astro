@@ -1,0 +1,279 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const seoConfig = {
+  title: "Panel de Administración - Ajedrez FAMAF",
+  description: "Panel de administración para gestionar torneos y posts",
+};
+---
+
+<Layout title={seoConfig.title} description={seoConfig.description}>
+  <div class="min-h-screen bg-gray-50 flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-900 border-b border-gray-700">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a href="/" class="flex items-center space-x-3">
+            <img
+              src="/ajedrezfamaf.jpg"
+              alt="Ajedrez FAMAF"
+              class="w-10 h-10 rounded-full"
+            />
+            <h1 class="text-xl font-bold text-white">Ajedrez FAMAF - Admin</h1>
+          </a>
+          <a
+            href="/torneos"
+            class="text-gray-400 hover:text-white transition-colors"
+          >
+            Torneos
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <!-- Login Section -->
+      <section class="py-16">
+      <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-lg rounded-lg p-8">
+          <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">
+              Panel de Administración
+            </h2>
+            <p class="text-gray-600">
+              Ingresa tu contraseña para acceder
+            </p>
+          </div>
+
+          <form id="admin-login-form" class="space-y-6">
+            <div>
+              <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                Contraseña
+              </label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                required
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Ingresa tu contraseña"
+              />
+            </div>
+
+            <button
+              type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+            >
+              Ingresar
+            </button>
+          </form>
+
+          <div id="error-message" class="mt-4 text-red-600 text-sm hidden">
+            Contraseña incorrecta. Intenta nuevamente.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Admin Panel (Hidden by default) -->
+    <section id="admin-panel" class="hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Navigation Tabs -->
+        <div class="mb-8">
+          <nav class="flex space-x-8">
+            <button
+              id="tab-torneos"
+              class="tab-button active py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600"
+            >
+              Torneos
+            </button>
+            <button
+              id="tab-posts"
+              class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700"
+            >
+              Posts
+            </button>
+          </nav>
+        </div>
+
+        <!-- Torneos Tab -->
+        <div id="content-torneos" class="tab-content">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">
+              Gestión de Torneos
+            </h3>
+            <button
+              id="create-tournament-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              style="display: none;"
+            >
+              Crear Torneo
+            </button>
+          </div>
+
+          <!-- Tournament List -->
+          <div class="bg-white shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 sm:p-6">
+              <p class="text-gray-500">
+                Aquí se mostrarán los torneos cuando esté conectado a la base de datos.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Posts Tab -->
+        <div id="content-posts" class="tab-content hidden">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">
+              Gestión de Posts
+            </h3>
+            <button
+              id="create-post-btn"
+              class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              style="display: none;"
+            >
+              Crear Post
+            </button>
+          </div>
+
+          <!-- Posts List -->
+          <div class="bg-white shadow overflow-hidden sm:rounded-md">
+            <div class="px-4 py-5 sm:p-6">
+              <p class="text-gray-500">
+                Aquí se mostrarán los posts cuando esté conectado a la base de datos.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 py-8 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+          <a
+            class="inline-flex items-center text-gray-300 hover:text-white transition-all text-lg"
+            href="https://gonza.gr"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            💻 🧉 Desarrollado por Gonza
+          </a>
+          <span class="text-gray-300 text-lg">
+            Córdoba, Argentina 🇦🇷
+          </span>
+        </div>
+      </div>
+    </footer>
+  </div>
+</Layout>
+
+<script define:vars={{ 
+  ADMIN_PASSWORD: process.env.CHESS_ADMIN_PASSWORD || 'admin123',
+  EDITOR_PASSWORD: process.env.CHESS_EDITOR_PASSWORD || 'editor123',
+  COLEGA_PASSWORD: process.env.CHESS_COLEGA_PASSWORD || 'colega123'
+}}>
+  // Authentication using environment variables for different roles
+  
+  let currentUserRole = null;
+  
+  document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('error-message');
+    const adminPanel = document.getElementById('admin-panel');
+    
+    // Check role based on password
+    if (password === ADMIN_PASSWORD) {
+      currentUserRole = 'admin';
+      adminPanel.classList.remove('hidden');
+      this.closest('section').classList.add('hidden');
+      updateUIForRole(currentUserRole);
+    } else if (password === EDITOR_PASSWORD) {
+      currentUserRole = 'editor';
+      adminPanel.classList.remove('hidden');
+      this.closest('section').classList.add('hidden');
+      updateUIForRole(currentUserRole);
+    } else if (password === COLEGA_PASSWORD) {
+      currentUserRole = 'colega';
+      adminPanel.classList.remove('hidden');
+      this.closest('section').classList.add('hidden');
+      updateUIForRole(currentUserRole);
+    } else {
+      errorMessage.classList.remove('hidden');
+      setTimeout(() => {
+        errorMessage.classList.add('hidden');
+      }, 3000);
+    }
+  });
+  
+  function updateUIForRole(role) {
+    const title = document.querySelector('h1');
+    const createTournamentBtn = document.getElementById('create-tournament-btn');
+    const createPostBtn = document.getElementById('create-post-btn');
+    
+    switch(role) {
+      case 'admin':
+        title.textContent = 'Ajedrez FAMAF - Admin';
+        createTournamentBtn.style.display = 'block';
+        createPostBtn.style.display = 'block';
+        break;
+      case 'editor':
+        title.textContent = 'Ajedrez FAMAF - Editor';
+        createTournamentBtn.style.display = 'none';
+        createPostBtn.style.display = 'block';
+        break;
+      case 'colega':
+        title.textContent = 'Ajedrez FAMAF - Colega';
+        createTournamentBtn.style.display = 'none';
+        createPostBtn.style.display = 'none';
+        break;
+    }
+  }
+
+  // Tab functionality
+  const tabButtons = document.querySelectorAll('.tab-button');
+  const tabContents = document.querySelectorAll('.tab-content');
+
+  tabButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      // Remove active class from all buttons
+      tabButtons.forEach(btn => {
+        btn.classList.remove('active', 'border-blue-500', 'text-blue-600');
+        btn.classList.add('border-transparent', 'text-gray-500');
+      });
+      
+      // Add active class to clicked button
+      this.classList.add('active', 'border-blue-500', 'text-blue-600');
+      this.classList.remove('border-transparent', 'text-gray-500');
+      
+      // Hide all tab contents
+      tabContents.forEach(content => {
+        content.classList.add('hidden');
+      });
+      
+      // Show corresponding tab content
+      const tabId = this.id.replace('tab-', 'content-');
+      document.getElementById(tabId).classList.remove('hidden');
+    });
+  });
+
+  // Create buttons functionality
+  document.getElementById('create-tournament-btn').addEventListener('click', function() {
+    alert('Funcionalidad de crear torneo - pendiente de implementar con base de datos');
+  });
+
+  document.getElementById('create-post-btn').addEventListener('click', function() {
+    alert('Funcionalidad de crear post - pendiente de implementar con base de datos');
+  });
+</script>
+
+<style>
+  .tab-button.active {
+    @apply border-blue-500 text-blue-600;
+  }
+</style>

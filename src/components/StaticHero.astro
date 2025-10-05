@@ -26,15 +26,24 @@
       la comunidad de ajedrez universitaria.
     </p>
 
-    <p class="hero-whatsapp">
-      <a
-        class="whatsapp-link"
-        href="https://chat.whatsapp.com/ETRrphVKwFnB1AWb5Ld9iB"
-        target="_blank"
-        rel="noopener noreferrer"
-        >Unirme al grupo de Whatsapp</a
-      >
-    </p>
+    <div class="hero-actions">
+      <p class="hero-whatsapp">
+        <a
+          class="whatsapp-link"
+          href="https://chat.whatsapp.com/ETRrphVKwFnB1AWb5Ld9iB"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Unirme al grupo de Whatsapp</a
+        >
+      </p>
+      <p class="hero-torneos" style="display: none;">
+        <a
+          class="torneos-link"
+          href="/torneos"
+          >Ver próximos Torneos</a
+        >
+      </p>
+    </div>
   </div>
 </header>
 
@@ -141,21 +150,50 @@
     color: #475569;
   }
 
-  .hero-whatsapp {
+  .hero-actions {
     margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  @media (min-width: 640px) {
+    .hero-actions {
+      flex-direction: row;
+      gap: 2rem;
+      justify-content: center;
+    }
+  }
+
+  .hero-whatsapp,
+  .hero-torneos {
     font-size: 1rem;
     line-height: 1.75rem;
     color: #475569;
+    margin: 0;
   }
 
-  .whatsapp-link {
-    color: #0ea5e9;
+  .whatsapp-link,
+  .torneos-link {
     font-weight: 600;
     text-decoration: none;
     transition: color 0.2s;
   }
 
+  .whatsapp-link {
+    color: #0ea5e9;
+  }
+
   .whatsapp-link:hover {
+    color: #0284c7;
+  }
+
+  .torneos-link {
+    color: #0ea5e9;
+  }
+
+  .torneos-link:hover {
     color: #0284c7;
   }
 
