@@ -14,6 +14,7 @@
     "extract-featured-images": "tsx scripts/extract-featured-images.ts",
     "clean-slugs": "tsx scripts/clean-slugs.ts",
     "fix-dates": "tsx scripts/fix-dates.ts",
+    "restore-post": "tsx scripts/restore-post.ts",
     "setup-db": "echo 'Ejecuta este SQL en tu dashboard de Supabase: scripts/setup-database.sql'",
     "setup-storage": "echo 'Ejecuta este SQL en tu dashboard de Supabase: scripts/setup-storage.sql'"
   },
