@@ -20,29 +20,7 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   }
 })
 
-// Función para obtener todos los IDs de posts
-async function getAllPostIds() {
-  const { data, error } = await supabaseAdmin
-    .from('posts')
-    .select('id')
-
-  if (error) {
-    console.error('Error fetching post IDs:', error)
-    return []
-  }
-
-  return data?.map(post => post.id) || []
-}
-
-// Exportar getStaticPaths para Astro
-export async function getStaticPaths() {
-  const postIds = await getAllPostIds()
-  
-  return postIds.map(id => ({
-    params: { id },
-    props: { id }
-  }))
-}
+// getStaticPaths no es necesario con output: 'server'
 
 // GET - Obtener post por ID
 export const GET: APIRoute = async ({ params }) => {
@@ -86,7 +64,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
   try {
     const { id } = params
     const body = await request.json()
-    const { title, slug, date, version, content } = body
+    const { title, slug, date, version, content, featured_image } = body
 
     if (!id) {
       return new Response(JSON.stringify({ error: 'Post ID is required' }), {
@@ -128,16 +106,23 @@ export const PUT: APIRoute = async ({ params, request }) => {
     }
 
     // Actualizar el post
+    const updateData: any = {
+      title,
+      slug,
+      date,
+      version,
+      content,
+      updated_at: new Date().toISOString()
+    }
+    
+    // Solo agregar featured_image si se proporciona
+    if (featured_image !== undefined) {
+      updateData.featured_image = featured_image
+    }
+    
     const { data, error } = await supabaseAdmin
       .from('posts')
-      .update({
-        title,
-        slug,
-        date,
-        version,
-        content,
-        updated_at: new Date().toISOString()
-      })
+      .update(updateData)
       .eq('id', id)
       .select()
       .single()
@@ -154,6 +139,7 @@ export const PUT: APIRoute = async ({ params, request }) => {
       headers: { 'Content-Type': 'application/json' }
     })
   } catch (error) {
+    console.error('PUT error:', error)
     return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

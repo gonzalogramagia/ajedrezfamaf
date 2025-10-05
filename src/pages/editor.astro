@@ -407,8 +407,25 @@ const posts = await getAllPosts();
 </Layout>
 
 <script define:vars={{ 
-  EDITOR_PASSWORD: process.env.CHESS_EDITOR_PASSWORD || 'editor123'
+  EDITOR_PASSWORD: process.env.CHESS_EDITOR_PASSWORD || 'editor123',
+  SUPABASE_URL: process.env.SUPABASE_URL || 'https://placeholder.supabase.co'
 }}>
+  // Función para obtener URL de imagen desde Supabase Storage
+  function getImageUrl(imagePath) {
+    if (!imagePath) return '';
+    
+    // Si ya es una URL completa, devolverla tal como está
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Si es una ruta local, convertirla a URL de Supabase Storage
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    const bucketName = 'post-images';
+    
+    return `${SUPABASE_URL}/storage/v1/object/public/${bucketName}/${cleanPath}`;
+  }
+
   // Editor authentication
   document.getElementById('editor-login-form').addEventListener('submit', function(e) {
     e.preventDefault();

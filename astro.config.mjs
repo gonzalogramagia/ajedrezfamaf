@@ -6,7 +6,7 @@ import mdx from '@astrojs/mdx';
 export default defineConfig({
   integrations: [tailwind(), mdx()],
   site: 'https://ajedrezfamaf.com',
-  output: 'hybrid',
+  output: 'server',
   markdown: {
     shikiConfig: {
       theme: 'nord',

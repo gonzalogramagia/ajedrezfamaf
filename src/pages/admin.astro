@@ -371,8 +371,25 @@ const posts = await getAllPosts();
 <script define:vars={{ 
   ADMIN_PASSWORD: process.env.CHESS_ADMIN_PASSWORD || 'admin123',
   EDITOR_PASSWORD: process.env.CHESS_EDITOR_PASSWORD || 'editor123',
-  COLEGA_PASSWORD: process.env.CHESS_COLEGA_PASSWORD || 'colega123'
+  COLEGA_PASSWORD: process.env.CHESS_COLEGA_PASSWORD || 'colega123',
+  SUPABASE_URL: process.env.SUPABASE_URL || 'https://placeholder.supabase.co'
 }}>
+  // Función para obtener URL de imagen desde Supabase Storage
+  function getImageUrl(imagePath) {
+    if (!imagePath) return '';
+    
+    // Si ya es una URL completa, devolverla tal como está
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    // Si es una ruta local, convertirla a URL de Supabase Storage
+    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+    const bucketName = 'post-images';
+    
+    return `${SUPABASE_URL}/storage/v1/object/public/${bucketName}/${cleanPath}`;
+  }
+
   // Authentication using environment variables for different roles
   
   let currentUserRole = null;

@@ -51,7 +51,7 @@ export const GET: APIRoute = async () => {
 export const POST: APIRoute = async ({ request }) => {
   try {
     const body = await request.json()
-    const { title, slug, date, version, content } = body
+    const { title, slug, date, version, content, featured_image } = body
 
     // Validar datos requeridos
     if (!title || !slug || !date || !version || !content) {
@@ -85,17 +85,24 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // Crear el post
+    const insertData: any = {
+      title,
+      slug,
+      date,
+      version,
+      content,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString()
+    }
+    
+    // Solo agregar featured_image si se proporciona
+    if (featured_image !== undefined && featured_image !== '') {
+      insertData.featured_image = featured_image
+    }
+    
     const { data, error } = await supabaseAdmin
       .from('posts')
-      .insert({
-        title,
-        slug,
-        date,
-        version,
-        content,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
+      .insert(insertData)
       .select()
       .single()
 
