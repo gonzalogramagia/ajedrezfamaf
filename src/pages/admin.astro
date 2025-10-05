@@ -64,7 +64,7 @@ const posts = await getAllPosts();
             </p>
           </div>
 
-          <form id="admin-login-form" class="space-y-6">
+          <form id="admin-login-form" class="space-y-6" method="post" action="#" onsubmit="return false;">
             <div>
               <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
                 Contraseña
@@ -574,27 +574,29 @@ const posts = await getAllPosts();
   COLEGA_PASSWORD: process.env.CHESS_COLEGA_PASSWORD || 'colega123',
   SUPABASE_URL: process.env.SUPABASE_URL || 'https://placeholder.supabase.co'
 }}>
-  // Función para obtener URL de imagen desde Supabase Storage
-  function getImageUrl(imagePath) {
-    if (!imagePath) return '';
-    
-    // Si ya es una URL completa, devolverla tal como está
-    if (imagePath.startsWith('http')) {
-      return imagePath;
+  // Esperar a que el DOM esté cargado
+  document.addEventListener('DOMContentLoaded', function() {
+    // Función para obtener URL de imagen desde Supabase Storage
+    function getImageUrl(imagePath) {
+      if (!imagePath) return '';
+      
+      // Si ya es una URL completa, devolverla tal como está
+      if (imagePath.startsWith('http')) {
+        return imagePath;
+      }
+      
+      // Si es una ruta local, convertirla a URL de Supabase Storage
+      const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
+      const bucketName = 'post-images';
+      
+      return `${SUPABASE_URL}/storage/v1/object/public/${bucketName}/${cleanPath}`;
     }
-    
-    // Si es una ruta local, convertirla a URL de Supabase Storage
-    const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-    const bucketName = 'post-images';
-    
-    return `${SUPABASE_URL}/storage/v1/object/public/${bucketName}/${cleanPath}`;
-  }
 
-  // Authentication using environment variables for different roles
-  
-  let currentUserRole = null;
-  
-  document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+    // Authentication using environment variables for different roles
+    
+    let currentUserRole = null;
+    
+    document.getElementById('admin-login-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const password = document.getElementById('password').value;
@@ -1210,6 +1212,8 @@ const posts = await getAllPosts();
       loadTournaments();
     }
   });
+
+  }); // End DOMContentLoaded
 
 </script>
 
