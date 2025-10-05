@@ -8,15 +8,24 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "migrate-posts": "tsx scripts/migrate-posts.ts",
+    "migrate-images": "tsx scripts/migrate-images.ts",
+    "setup-db": "echo 'Ejecuta este SQL en tu dashboard de Supabase: scripts/setup-database.sql'",
+    "setup-storage": "echo 'Ejecuta este SQL en tu dashboard de Supabase: scripts/setup-storage.sql'"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.0.0",
     "@astrojs/tailwind": "^5.1.0",
-    "astro": "^4.0.0"
+    "@supabase/supabase-js": "^2.58.0",
+    "astro": "^4.0.0",
+    "dotenv": "^17.2.3",
+    "gray-matter": "^4.0.3",
+    "marked": "^16.3.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.10",
-    "tailwindcss": "^3.4.0"
+    "tailwindcss": "^3.4.0",
+    "tsx": "^4.20.6"
   }
 }

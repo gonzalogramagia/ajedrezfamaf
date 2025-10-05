@@ -52,6 +52,13 @@ const { title, description = "Un espacio para compartir novedades, noticias y ev
       img.style.marginTop = '2rem';
       img.style.marginBottom = '1.5rem';
       img.style.display = 'block';
+      img.style.borderRadius = '12px';
+      
+      // Si la imagen está dentro de un enlace, agregar cursor pointer
+      const parentLink = img.closest('a');
+      if (parentLink) {
+        parentLink.style.cursor = 'pointer';
+      }
     });
 
     // Forzar espaciado en párrafos que contienen imágenes
@@ -438,6 +445,22 @@ const { title, description = "Un espacio para compartir novedades, noticias y ev
     margin-top: 2rem !important;
     margin-bottom: 1.5rem !important;
     display: block;
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .document a:has(img) {
+    display: block;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+
+  .document a:has(img):hover {
+    transform: scale(1.02);
+  }
+
+  .document a:has(img):hover img {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
   }
 
   /* Espaciado para párrafos que contienen solo imágenes */

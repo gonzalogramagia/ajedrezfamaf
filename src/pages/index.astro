@@ -4,6 +4,8 @@ import StaticHero from '../components/StaticHero.astro';
 import InstagramFloatingButton from '../components/InstagramFloatingButton.astro';
 import Badge from '../components/Badge.astro';
 import Authors from '../components/Authors.astro';
+import { getAllPosts } from '../lib/posts';
+import { parseMarkdown } from '../lib/markdown';
 
 const seoConfig = {
   title: "Ajedrez FAMAF",
@@ -15,13 +17,13 @@ const seoConfig = {
   },
 };
 
-// Obtener todos los posts
-const posts = await Astro.glob('../content/posts/*.md');
+// Obtener todos los posts desde Supabase
+const posts = await getAllPosts();
 
 // Ordenar por fecha (más antiguos primero)
 const sortedPosts = posts.sort((a, b) => {
-  const aNum = parseInt(a.file.split('/').pop().split('.')[0]);
-  const bNum = parseInt(b.file.split('/').pop().split('.')[0]);
+  const aNum = parseInt(a.slug.split('.')[0]);
+  const bNum = parseInt(b.slug.split('.')[0]);
   return aNum - bNum; // aNum - bNum para más antiguos primero
 });
 ---
@@ -36,26 +38,23 @@ const sortedPosts = posts.sort((a, b) => {
       {sortedPosts.map((post) => (
         <article class="md:flex">
           <h2 class="content-date h-full mt-px">
-            <a href="#2022-06-23">{post.frontmatter.date}</a>
+            <a href="#2022-06-23">{post.date}</a>
           </h2>
           <div class="content-block">
             <div class="feed-border"></div>
             <div class="feed-dot"></div>
             <div class="mb-6">
-              <Badge label={post.frontmatter.version} />
+              <Badge label={post.version} />
             </div>
             <h1 class="text-xl sm:text-3xl font-bold mb-4">
               <a 
-                href={`/${post.file.split('/').pop().replace('.md', '').replace(/^\d+\./, '')}`}
+                href={`/${post.slug ? post.slug.replace(/^\d+\./, '') : '#'}`}
                 class="hover:text-primary transition-colors"
-                target="_blank"
-                rel="noopener noreferrer"
               >
-                {post.frontmatter.title}
+                {post.title}
               </a>
             </h1>
-            <div class="document" set:html={post.compiledContent()} />
-            {post.frontmatter.authors && <Authors authors={post.frontmatter.authors} />}
+            <div class="document" set:html={parseMarkdown(post.content, `/${post.slug ? post.slug.replace(/^\d+\./, '') : '#'}`)} />
           </div>
         </article>
       ))}

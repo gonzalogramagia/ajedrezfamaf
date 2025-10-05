@@ -4,25 +4,32 @@ import StaticHeader from '../components/StaticHeader.astro';
 import InstagramFloatingButton from '../components/InstagramFloatingButton.astro';
 import Badge from '../components/Badge.astro';
 import Authors from '../components/Authors.astro';
+import { getAllPosts } from '../lib/posts';
+import { parseMarkdown } from '../lib/markdown';
 
 export async function getStaticPaths() {
-  const posts = await Astro.glob('../content/posts/*.md');
+  const posts = await getAllPosts();
   
   return posts.map((post) => {
-    const fileName = post.file.split('/').pop().replace('.md', '');
-    const slug = fileName.replace(/^\d+\./, '');
+    // Verificar que el post tenga slug
+    if (!post.slug) {
+      console.warn('Post sin slug:', post.title);
+      return null;
+    }
+    
+    const slug = post.slug.replace(/^\d+\./, '');
     
     return {
       params: { slug },
       props: { post }
     };
-  });
+  }).filter(Boolean); // Filtrar valores null
 }
 
 const { post } = Astro.props;
 ---
 
-<Layout title={`${post.frontmatter.title} - Ajedrez FAMAF`} description={post.frontmatter.title}>
+<Layout title={`${post.title} - Ajedrez FAMAF`} description={post.title}>
   <main class="post-main">
     <InstagramFloatingButton />
     
@@ -30,17 +37,32 @@ const { post } = Astro.props;
     
     <div class="post-content">
       <article class="post-article">
+        <!-- Botones duplicados arriba del título -->
+        <div class="post-header-actions">
+          <a href="/" class="back-link">
+            <svg class="back-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            Volver al inicio
+          </a>
+          
+          <button id="copyButtonTop" class="copy-button">
+            <svg id="copyIconTop" class="copy-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            <span id="copyTextTop">Copiar URL</span>
+          </button>
+        </div>
+
         <div class="post-header-info">
-          <h1 class="post-title">{post.frontmatter.title}</h1>
+          <h1 class="post-title">{post.title}</h1>
           <div class="post-meta">
-            <span class="post-date">{post.frontmatter.date}</span>
-            <Badge label={post.frontmatter.version} />
+            <span class="post-date">{post.date}</span>
+            <Badge label={post.version} />
           </div>
         </div>
         
-        <div class="post-body" set:html={post.compiledContent()} />
-        
-        {post.frontmatter.authors && <Authors authors={post.frontmatter.authors} />}
+        <div class="post-body" set:html={parseMarkdown(post.content)} />
         
         <div class="post-footer">
           <a href="/" class="back-link">
@@ -78,29 +100,35 @@ const { post } = Astro.props;
 
 <script>
   // Función para copiar la URL
-  const copyButton = document.getElementById('copyButton');
-  const copyIcon = document.getElementById('copyIcon');
-  const copyText = document.getElementById('copyText');
-  
-  copyButton?.addEventListener('click', async () => {
-    try {
-      const baseUrl = window.location.origin + window.location.pathname;
-      await navigator.clipboard.writeText(baseUrl);
-      
-      // Cambiar el texto e ícono temporalmente
-      copyText.textContent = '¡Copiado!';
-      copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
-      copyButton.classList.add('text-green-600', 'border-green-400');
-      
-      setTimeout(() => {
-        copyText.textContent = 'Copiar URL';
-        copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>';
-        copyButton.classList.remove('text-green-600', 'border-green-400');
-      }, 2000);
-    } catch (err) {
-      console.error('Error al copiar URL:', err);
-    }
-  });
+  function setupCopyButton(buttonId, iconId, textId) {
+    const copyButton = document.getElementById(buttonId);
+    const copyIcon = document.getElementById(iconId);
+    const copyText = document.getElementById(textId);
+    
+    copyButton?.addEventListener('click', async () => {
+      try {
+        const baseUrl = window.location.origin + window.location.pathname;
+        await navigator.clipboard.writeText(baseUrl);
+        
+        // Cambiar el texto e ícono temporalmente
+        copyText.textContent = '¡Copiado!';
+        copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+        copyButton.classList.add('text-green-600', 'border-green-400');
+        
+        setTimeout(() => {
+          copyText.textContent = 'Copiar URL';
+          copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>';
+          copyButton.classList.remove('text-green-600', 'border-green-400');
+        }, 2000);
+      } catch (err) {
+        console.error('Error al copiar URL:', err);
+      }
+    });
+  }
+
+  // Configurar ambos botones de copiar
+  setupCopyButton('copyButton', 'copyIcon', 'copyText');
+  setupCopyButton('copyButtonTop', 'copyIconTop', 'copyTextTop');
 
   // Forzar espaciado en imágenes
   document.addEventListener('DOMContentLoaded', function() {
@@ -109,6 +137,7 @@ const { post } = Astro.props;
       img.style.marginTop = '2rem';
       img.style.marginBottom = '1.5rem';
       img.style.display = 'block';
+      img.style.borderRadius = '12px';
     });
 
     // Forzar espaciado en párrafos que contienen imágenes
@@ -154,6 +183,17 @@ const { post } = Astro.props;
 
   .post-article {
     max-width: none;
+  }
+
+  .post-header-actions {
+    margin-top: -5.5rem;
+    margin-bottom: 3rem;
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .post-header-info {
@@ -214,6 +254,7 @@ const { post } = Astro.props;
     margin-top: 2rem !important;
     margin-bottom: 1.5rem !important;
     display: block;
+    border-radius: 12px;
   }
 
   /* Espaciado para párrafos que contienen solo imágenes */
