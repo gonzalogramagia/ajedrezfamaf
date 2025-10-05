@@ -106,12 +106,6 @@ const posts = await getAllPosts();
               >
                 Posts
               </button>
-              <button
-                id="tab-history"
-                class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700"
-              >
-                Historial de Cambios
-              </button>
             </nav>
           </div>
 
@@ -125,7 +119,7 @@ const posts = await getAllPosts();
                 id="create-post-btn"
                 class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
               >
-                Crear Nuevo Post
+                Crear Post
               </button>
             </div>
 
@@ -138,7 +132,9 @@ const posts = await getAllPosts();
                       <div class="flex justify-between items-start">
                         <div class="flex-1">
                           <h4 class="text-lg font-semibold text-gray-900 mb-2">
-                            {post.title}
+                            <a href={`/${post.slug}`} target="_blank" class="hover:text-blue-600 cursor-pointer">
+                              {post.title}
+                            </a>
                           </h4>
                          <p class="text-gray-600 text-sm mb-2">
                            Fecha: {formatDateToSpanish(post.date)}
@@ -157,13 +153,6 @@ const posts = await getAllPosts();
                           >
                             Editar
                           </button>
-                          <a 
-                            href={`/${post.slug.replace(/^\d+\./, '')}`}
-                            class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm inline-block"
-                            target="_blank"
-                          >
-                            Ver
-                          </a>
                         </div>
                       </div>
                     </div>
@@ -173,81 +162,6 @@ const posts = await getAllPosts();
             </div>
           </div>
 
-          <!-- History Tab -->
-          <div id="content-history" class="tab-content hidden">
-            <div class="mb-6">
-              <h3 class="text-2xl font-bold text-gray-900">
-                Historial de Cambios
-              </h3>
-            </div>
-
-            <!-- History List -->
-            <div class="bg-white shadow overflow-hidden sm:rounded-md">
-              <div class="px-4 py-5 sm:p-6">
-                <div class="space-y-4">
-                  <!-- Mock History Entry 1 -->
-                  <div class="border-l-4 border-blue-500 pl-4">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h4 class="text-lg font-semibold text-gray-900">
-                          Post "Torneo de Septiembre 2022" editado
-                        </h4>
-                        <p class="text-gray-600 text-sm">
-                          Editor: admin • Fecha: 23 de septiembre, 2022 - 14:30
-                        </p>
-                        <p class="text-gray-500 text-sm mt-1">
-                          Se actualizó la información de participantes y resultados
-                        </p>
-                      </div>
-                      <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
-                        Ver Cambios
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Mock History Entry 2 -->
-                  <div class="border-l-4 border-green-500 pl-4">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h4 class="text-lg font-semibold text-gray-900">
-                          Nuevo post creado: "Torneo de Agosto 2022"
-                        </h4>
-                        <p class="text-gray-600 text-sm">
-                          Editor: admin • Fecha: 22 de agosto, 2022 - 16:45
-                        </p>
-                        <p class="text-gray-500 text-sm mt-1">
-                          Post creado con información del segundo torneo
-                        </p>
-                      </div>
-                      <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
-                        Ver Post
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Mock History Entry 3 -->
-                  <div class="border-l-4 border-yellow-500 pl-4">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h4 class="text-lg font-semibold text-gray-900">
-                          Post "Vuelven las clases del taller" actualizado
-                        </h4>
-                        <p class="text-gray-600 text-sm">
-                          Editor: editor • Fecha: 20 de agosto, 2022 - 10:15
-                        </p>
-                        <p class="text-gray-500 text-sm mt-1">
-                          Se agregó información sobre horarios y ubicación
-                        </p>
-                      </div>
-                      <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
-                        Ver Cambios
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
     </main>
@@ -258,7 +172,7 @@ const posts = await getAllPosts();
         <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
           <div class="flex items-center justify-between p-6 border-b border-gray-200">
             <h3 class="text-xl font-semibold text-gray-900" id="modal-title">
-              Crear Nuevo Post
+              Crear Post
             </h3>
             <button id="close-modal" class="text-gray-400 hover:text-gray-600">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

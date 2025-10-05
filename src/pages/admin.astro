@@ -112,6 +112,12 @@ const posts = await getAllPosts();
               >
                 Posts
               </button>
+              <button
+                id="tab-historial"
+                class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700"
+              >
+                Historial de Cambios
+              </button>
             </nav>
           </div>
 
@@ -200,6 +206,102 @@ const posts = await getAllPosts();
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Historial Tab -->
+          <div id="content-historial" class="tab-content hidden">
+            <div class="mb-6">
+              <h3 class="text-2xl font-bold text-gray-900">
+                Historial de Cambios
+              </h3>
+            </div>
+
+            <!-- History List -->
+            <div class="bg-white shadow overflow-hidden sm:rounded-md">
+              <div class="px-4 py-5 sm:p-6">
+                <div class="space-y-4">
+                  <!-- Mock History Entry 1 - Post -->
+                  <div class="border-l-4 border-blue-500 pl-4">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h4 class="text-lg font-semibold text-gray-900">
+                          Post "Torneo de Septiembre 2022" editado
+                        </h4>
+                        <p class="text-gray-600 text-sm">
+                          Admin: admin • Fecha: 23 de septiembre, 2022 - 14:30
+                        </p>
+                        <p class="text-gray-500 text-sm mt-1">
+                          Se actualizó la información de participantes y resultados
+                        </p>
+                      </div>
+                      <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                        Ver Cambios
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Mock History Entry 2 - Torneo -->
+                  <div class="border-l-4 border-green-500 pl-4">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h4 class="text-lg font-semibold text-gray-900">
+                          Torneo "Campeonato de Primavera" creado
+                        </h4>
+                        <p class="text-gray-600 text-sm">
+                          Admin: admin • Fecha: 22 de septiembre, 2022 - 16:45
+                        </p>
+                        <p class="text-gray-500 text-sm mt-1">
+                          Nuevo torneo creado con 32 jugadores máximo
+                        </p>
+                      </div>
+                      <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                        Ver Torneo
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Mock History Entry 3 - Post -->
+                  <div class="border-l-4 border-yellow-500 pl-4">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h4 class="text-lg font-semibold text-gray-900">
+                          Post "Vuelven las clases del taller" actualizado
+                        </h4>
+                        <p class="text-gray-600 text-sm">
+                          Admin: admin • Fecha: 20 de septiembre, 2022 - 10:15
+                        </p>
+                        <p class="text-gray-500 text-sm mt-1">
+                          Se agregó información sobre horarios y ubicación
+                        </p>
+                      </div>
+                      <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                        Ver Cambios
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Mock History Entry 4 - Torneo -->
+                  <div class="border-l-4 border-red-500 pl-4">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h4 class="text-lg font-semibold text-gray-900">
+                          Torneo "Torneo de Agosto" eliminado
+                        </h4>
+                        <p class="text-gray-600 text-sm">
+                          Admin: admin • Fecha: 19 de septiembre, 2022 - 09:30
+                        </p>
+                        <p class="text-gray-500 text-sm mt-1">
+                          Torneo cancelado por falta de participantes
+                        </p>
+                      </div>
+                      <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-1 rounded text-sm">
+                        Ver Detalles
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -867,6 +969,253 @@ const posts = await getAllPosts();
 
     // Load tournaments initially
     loadTournaments();
+
+    // Post Modal functionality
+    const postModal = document.getElementById('post-modal');
+    const postModalTitle = document.getElementById('post-modal-title');
+    const postForm = document.getElementById('post-form');
+    const closePostModal = document.getElementById('close-post-modal');
+    const cancelPostModal = document.getElementById('cancel-post-modal');
+
+    // Open modal for creating new post
+    document.getElementById('create-post-btn').addEventListener('click', function() {
+      postModalTitle.textContent = 'Crear Post';
+      postForm.reset();
+      document.getElementById('post-id').value = '';
+      
+      // Resetear imagen de portada
+      const featuredImageInput = document.getElementById('post-image');
+      const featuredImagePreview = document.getElementById('featured-image-preview');
+      const uploadPreview = document.getElementById('featured-image-upload-preview');
+      const featuredImageOptional = document.getElementById('featured-image-optional');
+      const featuredImageHelp = document.getElementById('featured-image-help');
+      
+      featuredImageInput.value = '';
+      featuredImageInput.dataset.currentImage = '';
+      featuredImagePreview.classList.add('hidden');
+      uploadPreview.classList.add('hidden');
+      featuredImageOptional.textContent = '(requerida)';
+      featuredImageHelp.textContent = 'Selecciona una imagen para la portada del post';
+      
+      postModal.classList.remove('hidden');
+    });
+
+    // Open modal for editing existing post
+    document.addEventListener('click', async function(e) {
+      if (e.target.classList.contains('edit-post-btn')) {
+        const postId = e.target.dataset.postId;
+        
+        postModalTitle.textContent = 'Editar Post';
+        document.getElementById('post-id').value = postId;
+        
+        try {
+          // Fetch post data
+          const response = await fetch(`/api/posts/${postId}`);
+          if (response.ok) {
+            const post = await response.json();
+            
+            // Fill form with existing data
+            document.getElementById('post-id').value = post.id;
+            document.getElementById('post-title').value = post.title;
+            document.getElementById('post-slug').value = post.slug;
+            
+            // Convert date to YYYY-MM-DD format for date input
+            let dateValue = '';
+            try {
+              const dateObj = new Date(post.date);
+              if (!isNaN(dateObj.getTime())) {
+                dateValue = dateObj.toISOString().split('T')[0];
+              } else if (typeof post.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(post.date)) {
+                dateValue = post.date;
+              }
+            } catch (error) {
+              console.warn('Invalid date format:', post.date);
+              if (typeof post.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(post.date)) {
+                dateValue = post.date;
+              }
+            }
+            document.getElementById('post-date').value = dateValue;
+            
+            document.getElementById('post-version').value = post.version;
+            document.getElementById('post-content').value = post.content;
+            
+            // Manejar imagen de portada
+            const featuredImageInput = document.getElementById('post-image');
+            const featuredImagePreview = document.getElementById('featured-image-preview');
+            const previewImg = document.getElementById('preview-img');
+            const featuredImageOptional = document.getElementById('featured-image-optional');
+            const featuredImageHelp = document.getElementById('featured-image-help');
+            
+            featuredImageInput.value = '';
+            featuredImageInput.dataset.currentImage = post.featured_image || '';
+            featuredImageOptional.textContent = '(opcional)';
+            featuredImageHelp.textContent = 'Actualizar imagen de portada (opcional)';
+            
+            if (post.featured_image) {
+              previewImg.src = getImageUrl(post.featured_image);
+              featuredImagePreview.classList.remove('hidden');
+            } else {
+              featuredImagePreview.classList.add('hidden');
+            }
+            
+            postModal.classList.remove('hidden');
+          } else {
+            alert('Error al cargar el post. Intenta nuevamente.');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al cargar el post. Intenta nuevamente.');
+        }
+      }
+    });
+
+    // Close modal functions
+    closePostModal.addEventListener('click', function() {
+      postModal.classList.add('hidden');
+    });
+
+    cancelPostModal.addEventListener('click', function() {
+      postModal.classList.add('hidden');
+    });
+
+    // Close modal when clicking outside
+    postModal.addEventListener('click', function(e) {
+      if (e.target === postModal) {
+        postModal.classList.add('hidden');
+      }
+    });
+
+    // Save post functionality
+    document.getElementById('save-post').addEventListener('click', async function() {
+      const formData = new FormData(postForm);
+      const postId = document.getElementById('post-id').value;
+      const isEditing = postId !== '';
+      const imageFile = document.getElementById('post-image').files[0];
+
+      // Si es un post nuevo, la imagen es obligatoria
+      if (!isEditing && !imageFile) {
+        alert('Por favor selecciona una imagen de portada para el post');
+        return;
+      }
+
+      let featuredImagePath = '';
+
+      // Si hay una imagen nueva, subirla primero
+      if (imageFile) {
+        try {
+          const uploadFormData = new FormData();
+          uploadFormData.append('image', imageFile);
+          
+          const uploadResponse = await fetch('/api/upload-image', {
+            method: 'POST',
+            body: uploadFormData
+          });
+          
+          if (!uploadResponse.ok) {
+            throw new Error('Error al subir la imagen');
+          }
+          
+          const uploadResult = await uploadResponse.json();
+          featuredImagePath = uploadResult.fileName;
+        } catch (error) {
+          console.error('Error subiendo imagen:', error);
+          alert('Error al subir la imagen. Intenta nuevamente.');
+          return;
+        }
+      }
+
+      const postData = {
+        title: formData.get('title'),
+        slug: formData.get('slug'),
+        date: formData.get('date'),
+        version: formData.get('version'),
+        content: formData.get('content'),
+        featured_image: featuredImagePath || (isEditing ? document.getElementById('post-image').dataset.currentImage : '')
+      };
+
+      // Validar slug reservado
+      const reservedSlugs = ['torneos', 'admin', 'editor', 'colega']
+      if (reservedSlugs.includes(postData.slug.toLowerCase())) {
+        alert('Error: Este slug está reservado para rutas del sistema. Por favor usa otro slug.');
+        return;
+      }
+
+      try {
+        this.textContent = 'Guardando...';
+        this.disabled = true;
+
+        const url = '/api/posts' + (isEditing ? `/${postId}` : '');
+        const method = isEditing ? 'PUT' : 'POST';
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(postData)
+        });
+
+        if (response.ok) {
+          alert('Post guardado correctamente!');
+          postModal.classList.add('hidden');
+          window.location.reload();
+        } else {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al guardar el post');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al guardar el post: ' + error.message);
+      } finally {
+        this.textContent = 'Guardar Post';
+        this.disabled = false;
+      }
+    });
+
+    // Preview de imagen cuando se selecciona un archivo
+    document.getElementById('post-image').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      const uploadPreview = document.getElementById('featured-image-upload-preview');
+      const uploadPreviewImg = document.getElementById('upload-preview-img');
+      
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          uploadPreviewImg.src = e.target.result;
+          uploadPreview.classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      } else {
+        uploadPreview.classList.add('hidden');
+      }
+    });
+
+    // Delete post functionality
+    document.addEventListener('click', async function(e) {
+      if (e.target.classList.contains('delete-post-btn')) {
+        const postId = e.target.dataset.postId;
+        const postTitle = e.target.dataset.postTitle || 'este post';
+        
+        if (confirm(`¿Estás seguro de que quieres eliminar ${postTitle}?`)) {
+          try {
+            const response = await fetch(`/api/posts/${postId}`, {
+              method: 'DELETE'
+            });
+            
+            if (response.ok) {
+              alert('Post eliminado correctamente!');
+              window.location.reload();
+            } else {
+              const errorData = await response.json();
+              throw new Error(errorData.error || 'Error al eliminar el post');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error al eliminar el post: ' + error.message);
+          }
+        }
+      }
+    });
   }
   
   // Esperar a que el DOM esté listo
