@@ -568,15 +568,16 @@ const posts = await getAllPosts();
   </div>
 </Layout>
 
-<script define:vars={{ 
-  ADMIN_PASSWORD: process.env.CHESS_ADMIN_PASSWORD || 'admin123',
-  EDITOR_PASSWORD: process.env.CHESS_EDITOR_PASSWORD || 'editor123',
-  COLEGA_PASSWORD: process.env.CHESS_COLEGA_PASSWORD || 'colega123',
-  SUPABASE_URL: process.env.SUPABASE_URL || 'https://placeholder.supabase.co'
-}}>
+<script is:inline>
   // Esperar a que el DOM esté cargado
   document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM cargado, inicializando admin...');
+    
+    // Contraseñas (en producción estas deberían venir del servidor)
+    const ADMIN_PASSWORD = 'admin123';
+    const EDITOR_PASSWORD = 'editor123';
+    const COLEGA_PASSWORD = 'colega123';
+    const SUPABASE_URL = 'https://placeholder.supabase.co';
     
     // Función para obtener URL de imagen desde Supabase Storage
     function getImageUrl(imagePath) {
