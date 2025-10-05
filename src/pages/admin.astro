@@ -134,9 +134,12 @@ const posts = await getAllPosts();
           <!-- Tournament List -->
           <div class="bg-white shadow overflow-hidden sm:rounded-md">
             <div class="px-4 py-5 sm:p-6">
-              <p class="text-gray-500">
-                Aquí se mostrarán los torneos cuando esté conectado a la base de datos.
-              </p>
+              <div class="space-y-4" id="tournaments-list">
+                <div class="text-center py-8">
+                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                  <p class="text-gray-500">Cargando torneos...</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -352,6 +355,198 @@ const posts = await getAllPosts();
       </div>
     </div>
 
+    <!-- Tournament Modal -->
+    <div id="tournament-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+          <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <h3 class="text-xl font-semibold text-gray-900" id="tournament-modal-title">
+              Crear Nuevo Torneo
+            </h3>
+            <button id="close-tournament-modal" class="text-gray-400 hover:text-gray-600">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            <form id="tournament-form" class="space-y-6">
+              <input type="hidden" id="tournament-id" name="id" />
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="tournament-name" class="block text-sm font-medium text-gray-700 mb-2">
+                    Nombre del Torneo
+                  </label>
+                  <input
+                    type="text"
+                    id="tournament-name"
+                    name="name"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Ej: Torneo de Primavera 2024"
+                  />
+                </div>
+                
+                <div>
+                  <label for="tournament-system" class="block text-sm font-medium text-gray-700 mb-2">
+                    Sistema
+                  </label>
+                  <select
+                    id="tournament-system"
+                    name="system"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
+                    <option value="">Seleccionar sistema</option>
+                    <option value="suizo">Suizo</option>
+                    <option value="round_robin">Round Robin</option>
+                    <option value="eliminacion">Eliminación</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="tournament-description" class="block text-sm font-medium text-gray-700 mb-2">
+                  Descripción
+                </label>
+                <textarea
+                  id="tournament-description"
+                  name="description"
+                  rows="3"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Descripción del torneo..."
+                ></textarea>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                  <label for="tournament-max-players" class="block text-sm font-medium text-gray-700 mb-2">
+                    Máx. Jugadores
+                  </label>
+                  <input
+                    type="number"
+                    id="tournament-max-players"
+                    name="max_players"
+                    required
+                    min="2"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="32"
+                  />
+                </div>
+                
+                <div>
+                  <label for="tournament-time" class="block text-sm font-medium text-gray-700 mb-2">
+                    Tiempo por Jugador (min)
+                  </label>
+                  <input
+                    type="number"
+                    id="tournament-time"
+                    name="time_per_player"
+                    required
+                    min="5"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="60"
+                  />
+                </div>
+                
+                <div>
+                  <label for="tournament-cost" class="block text-sm font-medium text-gray-700 mb-2">
+                    Costo ($)
+                  </label>
+                  <input
+                    type="number"
+                    id="tournament-cost"
+                    name="cost"
+                    required
+                    min="0"
+                    step="0.01"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="5000"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="tournament-date" class="block text-sm font-medium text-gray-700 mb-2">
+                    Fecha
+                  </label>
+                  <input
+                    type="date"
+                    id="tournament-date"
+                    name="start_date"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                
+                <div>
+                  <label for="tournament-time-start" class="block text-sm font-medium text-gray-700 mb-2">
+                    Hora de Inicio
+                  </label>
+                  <input
+                    type="time"
+                    id="tournament-time-start"
+                    name="start_time"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="tournament-location" class="block text-sm font-medium text-gray-700 mb-2">
+                  Ubicación
+                </label>
+                <input
+                  type="text"
+                  id="tournament-location"
+                  name="location"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Ej: FAMAF - Aula Magna"
+                />
+              </div>
+
+              <div>
+                <label for="tournament-prizes" class="block text-sm font-medium text-gray-700 mb-2">
+                  Premios (opcional)
+                </label>
+                <textarea
+                  id="tournament-prizes"
+                  name="prizes"
+                  rows="2"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Descripción de los premios..."
+                ></textarea>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
+            <button
+              id="cancel-tournament-btn"
+              type="button"
+              class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+            >
+              Cancelar
+            </button>
+            <button
+              id="save-tournament-btn"
+              type="submit"
+              form="tournament-form"
+              class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+            >
+              Guardar Torneo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-gray-900 border-t border-gray-700 py-8 mt-auto">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -491,7 +686,10 @@ const posts = await getAllPosts();
 
   // Create buttons functionality
   document.getElementById('create-tournament-btn').addEventListener('click', function() {
-    alert('Funcionalidad de crear torneo - pendiente de implementar con base de datos');
+    document.getElementById('tournament-modal-title').textContent = 'Crear Nuevo Torneo';
+    document.getElementById('tournament-form').reset();
+    document.getElementById('tournament-id').value = '';
+    document.getElementById('tournament-modal').classList.remove('hidden');
   });
 
   document.getElementById('create-post-btn').addEventListener('click', function() {
@@ -767,6 +965,249 @@ const posts = await getAllPosts();
       reader.readAsDataURL(file);
     } else {
       uploadPreview.classList.add('hidden');
+    }
+  });
+
+  // ===== TOURNAMENT FUNCTIONALITY =====
+  
+  // Tournament modal elements
+  const tournamentModal = document.getElementById('tournament-modal');
+  const tournamentModalTitle = document.getElementById('tournament-modal-title');
+  const tournamentForm = document.getElementById('tournament-form');
+  const closeTournamentModal = document.getElementById('close-tournament-modal');
+  const cancelTournamentBtn = document.getElementById('cancel-tournament-btn');
+
+  // Tournament modal functionality
+  function openTournamentModal() {
+    tournamentModal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  }
+
+  function closeTournamentModal() {
+    tournamentModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
+    tournamentForm.reset();
+    document.getElementById('tournament-id').value = '';
+  }
+
+  closeTournamentModal.addEventListener('click', closeTournamentModal);
+  cancelTournamentBtn.addEventListener('click', closeTournamentModal);
+
+  // Close modal when clicking outside
+  tournamentModal.addEventListener('click', function(e) {
+    if (e.target === tournamentModal) {
+      closeTournamentModal();
+    }
+  });
+
+  // Load tournaments from API
+  async function loadTournaments() {
+    try {
+      const response = await fetch('/api/tournaments');
+      if (!response.ok) {
+        throw new Error('Error al cargar torneos');
+      }
+      
+      const tournaments = await response.json();
+      displayTournaments(tournaments);
+    } catch (error) {
+      console.error('Error loading tournaments:', error);
+      document.getElementById('tournaments-list').innerHTML = `
+        <div class="text-center py-8">
+          <p class="text-red-500">Error al cargar torneos: ${error.message}</p>
+          <button onclick="loadTournaments()" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg">
+            Reintentar
+          </button>
+        </div>
+      `;
+    }
+  }
+
+  // Display tournaments in the list
+  function displayTournaments(tournaments) {
+    const tournamentsList = document.getElementById('tournaments-list');
+    
+    if (tournaments.length === 0) {
+      tournamentsList.innerHTML = `
+        <div class="text-center py-8">
+          <p class="text-gray-500">No hay torneos creados aún.</p>
+        </div>
+      `;
+      return;
+    }
+
+    tournamentsList.innerHTML = tournaments.map(tournament => {
+      const statusColors = {
+        'upcoming': 'bg-blue-500',
+        'active': 'bg-green-500',
+        'completed': 'bg-gray-500',
+        'cancelled': 'bg-red-500'
+      };
+
+      const statusLabels = {
+        'upcoming': 'Próximo',
+        'active': 'Activo',
+        'completed': 'Finalizado',
+        'cancelled': 'Cancelado'
+      };
+
+      return `
+        <div class="border border-gray-200 rounded-lg p-4" data-tournament-id="${tournament.id}">
+          <div class="flex justify-between items-start mb-4">
+            <span class="px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[tournament.status]}">
+              ${statusLabels[tournament.status]}
+            </span>
+            <div class="flex space-x-2">
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm edit-tournament-btn" data-tournament-id="${tournament.id}">
+                Editar
+              </button>
+              <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm delete-tournament-btn admin-only" data-tournament-id="${tournament.id}" data-tournament-name="${tournament.name}">
+                Eliminar
+              </button>
+            </div>
+          </div>
+          <h4 class="text-lg font-semibold text-gray-900 mb-2">${tournament.name}</h4>
+          <div class="space-y-2 text-sm text-gray-600">
+            <p>📅 ${formatDateToSpanish(tournament.start_date)} - ${tournament.start_time}</p>
+            <p>👥 ${tournament.max_players} jugadores</p>
+            <p>📍 ${tournament.location}</p>
+            <p>💰 $${tournament.cost}</p>
+            <p>🎯 Sistema: ${tournament.system}</p>
+            <p>⏱️ ${tournament.time_per_player} min por jugador</p>
+          </div>
+          <p class="text-gray-700 mt-3">${tournament.description}</p>
+        </div>
+      `;
+    }).join('');
+  }
+
+  // Save tournament functionality
+  document.getElementById('save-tournament-btn').addEventListener('click', async function() {
+    const formData = new FormData(tournamentForm);
+    const tournamentId = document.getElementById('tournament-id').value;
+    const isEditing = tournamentId !== '';
+
+    const tournamentData = {
+      name: formData.get('name'),
+      description: formData.get('description'),
+      max_players: formData.get('max_players'),
+      system: formData.get('system'),
+      time_per_player: formData.get('time_per_player'),
+      start_date: formData.get('start_date'),
+      start_time: formData.get('start_time'),
+      location: formData.get('location'),
+      prizes: formData.get('prizes') || '',
+      cost: formData.get('cost')
+    };
+
+    try {
+      this.textContent = 'Guardando...';
+      this.disabled = true;
+
+      const method = isEditing ? 'PUT' : 'POST';
+      const url = isEditing ? `/api/tournaments/${tournamentId}` : '/api/tournaments';
+      
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(tournamentData),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al guardar el torneo');
+      }
+      
+      alert('Torneo guardado correctamente!');
+      closeTournamentModal();
+      loadTournaments(); // Reload tournaments list
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Error al guardar el torneo: ' + error.message);
+    } finally {
+      this.textContent = 'Guardar Torneo';
+      this.disabled = false;
+    }
+  });
+
+  // Edit tournament functionality
+  document.addEventListener('click', async function(e) {
+    if (e.target.classList.contains('edit-tournament-btn')) {
+      const tournamentId = e.target.dataset.tournamentId;
+      
+      try {
+        tournamentModalTitle.textContent = 'Cargando...';
+        openTournamentModal();
+
+        const response = await fetch(`/api/tournaments/${tournamentId}`);
+        if (!response.ok) {
+          throw new Error(`Error al cargar el torneo: ${response.status}`);
+        }
+        
+        const tournament = await response.json();
+        
+        // Fill form with existing data
+        document.getElementById('tournament-id').value = tournament.id;
+        document.getElementById('tournament-name').value = tournament.name;
+        document.getElementById('tournament-description').value = tournament.description;
+        document.getElementById('tournament-max-players').value = tournament.max_players;
+        document.getElementById('tournament-system').value = tournament.system;
+        document.getElementById('tournament-time').value = tournament.time_per_player;
+        document.getElementById('tournament-date').value = tournament.start_date;
+        document.getElementById('tournament-time-start').value = tournament.start_time;
+        document.getElementById('tournament-location').value = tournament.location;
+        document.getElementById('tournament-cost').value = tournament.cost;
+        document.getElementById('tournament-prizes').value = tournament.prizes || '';
+        
+        tournamentModalTitle.textContent = 'Editar Torneo';
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Error al cargar el torneo. Intenta nuevamente.');
+        closeTournamentModal();
+      }
+    }
+  });
+
+  // Delete tournament functionality
+  document.addEventListener('click', async function(e) {
+    if (e.target.classList.contains('delete-tournament-btn')) {
+      const tournamentId = e.target.dataset.tournamentId;
+      const tournamentName = e.target.dataset.tournamentName;
+
+      if (confirm(`¿Estás seguro de que quieres eliminar el torneo "${tournamentName}"?`)) {
+        try {
+          const response = await fetch(`/api/tournaments/${tournamentId}`, {
+            method: 'DELETE',
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al eliminar el torneo');
+          }
+
+          alert('Torneo eliminado correctamente!');
+          loadTournaments(); // Reload tournaments list
+        } catch (error) {
+          console.error('Error:', error);
+          alert('Error al eliminar el torneo: ' + error.message);
+        }
+      }
+    }
+  });
+
+  // Load tournaments when admin panel is shown
+  document.getElementById('admin-panel').addEventListener('DOMNodeInserted', function() {
+    if (currentUserRole === 'admin') {
+      loadTournaments();
+    }
+  });
+
+  // Also load tournaments when switching to tournaments tab
+  document.getElementById('tab-torneos').addEventListener('click', function() {
+    if (currentUserRole === 'admin') {
+      loadTournaments();
     }
   });
 
