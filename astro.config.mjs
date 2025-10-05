@@ -8,6 +8,7 @@ export default defineConfig({
   integrations: [tailwind(), mdx()],
   site: 'https://ajedrezfamaf.com',
   output: 'hybrid',
+  adapter: vercel(),
   markdown: {
     shikiConfig: {
       theme: 'nord',
