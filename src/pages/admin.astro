@@ -150,9 +150,9 @@ const posts = await getAllPosts();
               </h3>
               <button
                 id="create-post-btn"
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md"
               >
-                Crear Nuevo Post
+                Crear Post
               </button>
             </div>
 
@@ -413,6 +413,149 @@ const posts = await getAllPosts();
               class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Guardar Torneo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post Editor Modal -->
+    <div id="post-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+          <div class="flex items-center justify-between p-6 border-b border-gray-200">
+            <h3 class="text-xl font-semibold text-gray-900" id="post-modal-title">
+              Crear Post
+            </h3>
+            <button id="close-post-modal" class="text-gray-400 hover:text-gray-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+            <form id="post-form" class="space-y-6">
+              <input type="hidden" id="post-id" name="postId" />
+              
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="post-title" class="block text-sm font-medium text-gray-700 mb-2">
+                    Título del Post
+                  </label>
+                  <input
+                    type="text"
+                    id="post-title"
+                    name="title"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Ingresa el título del post"
+                  />
+                </div>
+                
+                <div>
+                  <label for="post-slug" class="block text-sm font-medium text-gray-700 mb-2">
+                    Slug (URL)
+                  </label>
+                  <input
+                    type="text"
+                    id="post-slug"
+                    name="slug"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="torneo-septiembre-2022"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label for="post-date" class="block text-sm font-medium text-gray-700 mb-2">
+                    Fecha
+                  </label>
+                  <input
+                    type="date"
+                    id="post-date"
+                    name="date"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                
+                <div>
+                  <label for="post-version" class="block text-sm font-medium text-gray-700 mb-2">
+                    Versión
+                  </label>
+                  <input
+                    type="text"
+                    id="post-version"
+                    name="version"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="v1.0"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label for="post-content" class="block text-sm font-medium text-gray-700 mb-2">
+                  Contenido (Markdown)
+                </label>
+                <textarea
+                  id="post-content"
+                  name="content"
+                  rows="15"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                  placeholder="Escribe el contenido del post en Markdown..."
+                ></textarea>
+                <p class="text-sm text-gray-500 mt-2">
+                  Puedes usar Markdown para formatear el contenido. Las imágenes se subirán automáticamente a Supabase Storage.
+                </p>
+              </div>
+
+              <div>
+                <label for="post-image" class="block text-sm font-medium text-gray-700 mb-2">
+                  <span id="featured-image-label">Imagen de Portada</span>
+                  <span id="featured-image-optional" class="text-gray-500">(requerida)</span>
+                </label>
+                <input
+                  type="file"
+                  id="post-image"
+                  name="image"
+                  accept="image/*"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <div id="featured-image-preview" class="mt-2 hidden">
+                  <p class="text-xs text-gray-500 mb-1">Imagen actual:</p>
+                  <img id="preview-img" class="w-32 h-20 object-cover rounded border" alt="Preview" />
+                </div>
+                <div id="featured-image-upload-preview" class="mt-2 hidden">
+                  <p class="text-xs text-gray-500 mb-1">Nueva imagen seleccionada:</p>
+                  <img id="upload-preview-img" class="w-32 h-20 object-cover rounded border" alt="Upload Preview" />
+                </div>
+                <p class="text-sm text-gray-500 mt-2">
+                  <span id="featured-image-help">Selecciona una imagen para la portada del post</span>
+                </p>
+              </div>
+            </form>
+          </div>
+          
+          <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
+            <button
+              type="button"
+              id="cancel-post-modal"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              id="save-post"
+              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
+            >
+              Guardar Post
             </button>
           </div>
         </div>

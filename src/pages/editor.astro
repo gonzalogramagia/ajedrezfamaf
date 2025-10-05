@@ -513,7 +513,7 @@ const posts = await getAllPosts();
   });
 
   // Open modal for editing existing post
-  document.addEventListener('click', function(e) {
+  document.addEventListener('click', async function(e) {
     if (e.target.classList.contains('edit-post-btn')) {
       const postId = e.target.dataset.postId;
       const postElement = document.querySelector(`[data-post-id="${postId}"]`);
