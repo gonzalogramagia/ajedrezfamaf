@@ -1547,6 +1547,7 @@ __metadata:
     dotenv: "npm:^17.2.3"
     gray-matter: "npm:^4.0.3"
     marked: "npm:^16.3.0"
+    parse-multipart-data: "npm:^1.5.0"
     tailwindcss: "npm:^3.4.0"
     tsx: "npm:^4.20.6"
   languageName: unknown
@@ -4480,6 +4481,13 @@ __metadata:
     unist-util-visit-children: "npm:^3.0.0"
     vfile: "npm:^6.0.0"
   checksum: 10c0/4232a464f98c41c6680575c54bc2c9b21ac4b82a1f796a871bfef5efa6eddaab9bccf734b08cde6b0a5504ef46a0a14041ddd0bc5d9cc70f73a507f93f610596
+  languageName: node
+  linkType: hard
+
+"parse-multipart-data@npm:^1.5.0":
+  version: 1.5.0
+  resolution: "parse-multipart-data@npm:1.5.0"
+  checksum: 10c0/d2139ee1391cea6b9ec1dc6363ddc602b7d02b1e41a54dcbfc5fc63c13a88f372170fa4971a8a3a792ea034aef0517f555732bcfd0eed2411c0d86fc1e2278c7
   languageName: node
   linkType: hard
 

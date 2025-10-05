@@ -349,17 +349,27 @@ const posts = await getAllPosts();
 
               <div>
                 <label for="post-image" class="block text-sm font-medium text-gray-700 mb-2">
-                  Imagen de Portada (Opcional)
+                  <span id="featured-image-label">Imagen de Portada</span>
+                  <span id="featured-image-optional" class="text-gray-500">(requerida)</span>
                 </label>
                 <input
                   type="file"
                   id="post-image"
                   name="image"
                   accept="image/*"
+                  required
                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+                <div id="featured-image-preview" class="mt-2 hidden">
+                  <p class="text-xs text-gray-500 mb-1">Imagen actual:</p>
+                  <img id="preview-img" class="w-32 h-20 object-cover rounded border" alt="Preview" />
+                </div>
+                <div id="featured-image-upload-preview" class="mt-2 hidden">
+                  <p class="text-xs text-gray-500 mb-1">Nueva imagen seleccionada:</p>
+                  <img id="upload-preview-img" class="w-32 h-20 object-cover rounded border" alt="Upload Preview" />
+                </div>
                 <p class="text-sm text-gray-500 mt-2">
-                  Las imágenes se subirán automáticamente a Supabase Storage.
+                  <span id="featured-image-help">Selecciona una imagen para la portada del post</span>
                 </p>
               </div>
             </form>
@@ -484,6 +494,21 @@ const posts = await getAllPosts();
     modalTitle.textContent = 'Crear Nuevo Post';
     postForm.reset();
     document.getElementById('post-id').value = '';
+    
+    // Resetear imagen de portada
+    const featuredImageInput = document.getElementById('post-image');
+    const featuredImagePreview = document.getElementById('featured-image-preview');
+    const uploadPreview = document.getElementById('featured-image-upload-preview');
+    const featuredImageOptional = document.getElementById('featured-image-optional');
+    const featuredImageHelp = document.getElementById('featured-image-help');
+    
+    featuredImageInput.value = '';
+    featuredImageInput.dataset.currentImage = '';
+    featuredImagePreview.classList.add('hidden');
+    uploadPreview.classList.add('hidden');
+    featuredImageOptional.textContent = '(requerida)';
+    featuredImageHelp.textContent = 'Selecciona una imagen para la portada del post';
+    
     modal.classList.remove('hidden');
   });
 
@@ -531,6 +556,30 @@ const posts = await getAllPosts();
           document.getElementById('post-version').value = post.version;
           document.getElementById('post-content').value = post.content;
           
+          // Manejar imagen de portada
+          const featuredImageInput = document.getElementById('post-image');
+          const featuredImagePreview = document.getElementById('featured-image-preview');
+          const previewImg = document.getElementById('preview-img');
+          const featuredImageOptional = document.getElementById('featured-image-optional');
+          const featuredImageHelp = document.getElementById('featured-image-help');
+          
+          // Limpiar input de archivo
+          featuredImageInput.value = '';
+          
+          if (post.featured_image) {
+            // Guardar la imagen actual en un data attribute para referencia
+            featuredImageInput.dataset.currentImage = post.featured_image;
+            previewImg.src = getImageUrl(post.featured_image);
+            featuredImagePreview.classList.remove('hidden');
+            featuredImageOptional.textContent = '(opcional)';
+            featuredImageHelp.textContent = 'Actualizar imagen de portada (opcional)';
+          } else {
+            featuredImageInput.dataset.currentImage = '';
+            featuredImagePreview.classList.add('hidden');
+            featuredImageOptional.textContent = '(requerida)';
+            featuredImageHelp.textContent = 'Selecciona una imagen para la portada del post';
+          }
+          
           modal.classList.remove('hidden');
         } else {
           throw new Error('Error al cargar el post');
@@ -561,13 +610,48 @@ const posts = await getAllPosts();
     const formData = new FormData(postForm);
     const postId = document.getElementById('post-id').value;
     const isEditing = postId !== '';
+    const imageFile = document.getElementById('post-image').files[0];
+
+    // Si es un post nuevo, la imagen es obligatoria
+    if (!isEditing && !imageFile) {
+      alert('Por favor selecciona una imagen de portada para el post');
+      return;
+    }
+
+    let featuredImagePath = '';
+
+    // Si hay una imagen nueva, subirla primero
+    if (imageFile) {
+      try {
+        const uploadFormData = new FormData();
+        uploadFormData.append('image', imageFile);
+        
+        const uploadResponse = await fetch('/api/upload-image', {
+          method: 'POST',
+          body: uploadFormData
+        });
+        
+        if (!uploadResponse.ok) {
+          throw new Error('Error al subir la imagen');
+        }
+        
+        const uploadResult = await uploadResponse.json();
+        featuredImagePath = uploadResult.fileName;
+        console.log('Imagen subida:', featuredImagePath);
+      } catch (error) {
+        console.error('Error subiendo imagen:', error);
+        alert('Error al subir la imagen. Intenta nuevamente.');
+        return;
+      }
+    }
 
     const postData = {
       title: formData.get('title'),
       slug: formData.get('slug'),
       date: formData.get('date'),
       version: formData.get('version'),
-      content: formData.get('content')
+      content: formData.get('content'),
+      featured_image: featuredImagePath || (isEditing ? document.getElementById('post-image').dataset.currentImage : '')
     };
 
     // Validar slug reservado en frontend
@@ -606,6 +690,24 @@ const posts = await getAllPosts();
     } finally {
       this.textContent = 'Guardar Post';
       this.disabled = false;
+    }
+  });
+
+  // Preview de imagen cuando se selecciona un archivo
+  document.getElementById('post-image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const uploadPreview = document.getElementById('featured-image-upload-preview');
+    const uploadPreviewImg = document.getElementById('upload-preview-img');
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadPreviewImg.src = e.target.result;
+        uploadPreview.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    } else {
+      uploadPreview.classList.add('hidden');
     }
   });
 </script>
