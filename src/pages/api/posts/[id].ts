@@ -20,7 +20,29 @@ const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey, {
   }
 })
 
-// getStaticPaths no es necesario con output: 'server'
+// Función para obtener todos los IDs de posts
+async function getAllPostIds() {
+  const { data, error } = await supabaseAdmin
+    .from('posts')
+    .select('id')
+
+  if (error) {
+    console.error('Error fetching post IDs:', error)
+    return []
+  }
+
+  return data?.map(post => post.id) || []
+}
+
+// Exportar getStaticPaths para Astro
+export async function getStaticPaths() {
+  const postIds = await getAllPostIds()
+  
+  return postIds.map(id => ({
+    params: { id },
+    props: { id }
+  }))
+}
 
 // GET - Obtener post por ID
 export const GET: APIRoute = async ({ params }) => {

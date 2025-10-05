@@ -7,8 +7,7 @@ import vercel from '@astrojs/vercel';
 export default defineConfig({
   integrations: [tailwind(), mdx()],
   site: 'https://ajedrezfamaf.com',
-  output: 'server',
-  adapter: vercel(),
+  output: 'hybrid',
   markdown: {
     shikiConfig: {
       theme: 'nord',
