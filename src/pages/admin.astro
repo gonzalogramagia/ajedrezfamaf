@@ -8,7 +8,6 @@ const seoConfig = {
   description: "Panel de administración para gestionar torneos y posts",
 };
 
-// Cargar posts desde Supabase
 // Función para convertir fecha YYYY-MM-DD a formato español
 function formatDateToSpanish(dateString: string): string {
   const date = new Date(dateString);
@@ -52,308 +51,181 @@ const posts = await getAllPosts();
 
     <main class="flex-1">
       <!-- Login Section -->
-      <section class="py-16">
-      <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="bg-white shadow-lg rounded-lg p-8">
-          <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">
-              Panel de Administración
-            </h2>
-            <p class="text-gray-600">
-              Ingresa tu contraseña para acceder
-            </p>
-          </div>
-
-          <form id="admin-login-form" class="space-y-6" method="post" action="#" onsubmit="return false;">
-            <div>
-              <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Ingresa tu contraseña"
-              />
+      <section id="admin-login" class="py-16">
+        <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="bg-white shadow-lg rounded-lg p-8">
+            <div class="text-center mb-8">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">
+                Acceso de Administrador
+              </h2>
+              <p class="text-gray-600">
+                Ingresa tu contraseña para acceder
+              </p>
             </div>
 
-            <button
-              type="submit"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-            >
-              Ingresar
-            </button>
-          </form>
+            <form id="admin-login-form" class="space-y-6" method="post" action="#" onsubmit="return false;">
+              <div>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                  Contraseña
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="Ingresa tu contraseña"
+                />
+              </div>
 
-          <div id="error-message" class="mt-4 text-red-600 text-sm hidden">
-            Contraseña incorrecta. Intenta nuevamente.
+              <button
+                type="submit"
+                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                Ingresar
+              </button>
+            </form>
+
+            <div id="error-message" class="mt-4 text-red-600 text-sm hidden">
+              Contraseña incorrecta. Intenta nuevamente.
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Admin Panel (Hidden by default) -->
-    <section id="admin-panel" class="hidden">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
-        <!-- Navigation Tabs -->
-        <div class="mb-8">
-          <nav class="flex space-x-8">
-            <button
-              id="tab-torneos"
-              class="tab-button active py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600"
-            >
-              Torneos
-            </button>
-            <button
-              id="tab-posts"
-              class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700"
-            >
-              Posts
-            </button>
-          </nav>
-        </div>
-
-        <!-- Torneos Tab -->
-        <div id="content-torneos" class="tab-content">
-          <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-900">
-              Gestión de Torneos
-            </h3>
-            <button
-              id="create-tournament-btn"
-              class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-              style="display: none;"
-            >
-              Crear Torneo
-            </button>
+      <!-- Admin Panel (Hidden by default) -->
+      <section id="admin-panel" class="hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          
+          <!-- Navigation Tabs -->
+          <div class="mb-8">
+            <nav class="flex space-x-8">
+              <button
+                id="tab-torneos"
+                class="tab-button active py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-600"
+              >
+                Torneos
+              </button>
+              <button
+                id="tab-posts"
+                class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700"
+              >
+                Posts
+              </button>
+            </nav>
           </div>
 
-          <!-- Tournament List -->
-          <div class="bg-white shadow overflow-hidden sm:rounded-md">
-            <div class="px-4 py-5 sm:p-6">
-              <div class="space-y-4" id="tournaments-list">
-                <div class="text-center py-8">
-                  <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                  <p class="text-gray-500">Cargando torneos...</p>
+          <!-- Torneos Tab -->
+          <div id="content-torneos" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-900">
+                Gestión de Torneos
+              </h3>
+              <button
+                id="create-tournament-btn"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                Crear Torneo
+              </button>
+            </div>
+
+            <!-- Tournament List -->
+            <div class="bg-white shadow overflow-hidden sm:rounded-md">
+              <div class="px-4 py-5 sm:p-6">
+                <div class="space-y-4" id="tournaments-list">
+                  <div class="text-center py-8">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p class="text-gray-500">Cargando torneos...</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Posts Tab -->
+          <div id="content-posts" class="tab-content hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h3 class="text-2xl font-bold text-gray-900">
+                Gestión de Posts
+              </h3>
+              <button
+                id="create-post-btn"
+                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg shadow-md"
+              >
+                Crear Nuevo Post
+              </button>
+            </div>
+
+            <!-- Posts List -->
+            <div class="bg-white shadow overflow-hidden sm:rounded-md">
+              <div class="px-4 py-5 sm:p-6">
+                <div class="space-y-4" id="admin-posts-list">
+                  {posts.map((post) => (
+                    <div class="border border-gray-200 rounded-lg p-4 flex items-start space-x-4" data-post-id={post.id}>
+                      <div class="flex-1">
+                        <h4 class="text-lg font-semibold text-gray-900 mb-2">
+                          <a 
+                            href={`/${post.slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-blue-600 hover:text-blue-800 hover:underline"
+                          >
+                            {post.title}
+                          </a>
+                        </h4>
+                        <p class="text-gray-600 text-sm mb-2">
+                          Fecha: {formatDateToSpanish(post.date)}
+                        </p>
+                        <p class="text-gray-600 text-sm mb-2">
+                          Slug: {post.slug}
+                        </p>
+                        <p class="text-gray-500 text-sm">
+                          {post.content.substring(0, 100)}...
+                        </p>
+                      </div>
+                      <div class="flex space-x-2">
+                        <button 
+                          class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm edit-post-btn"
+                          data-post-id={post.id}
+                        >
+                          Editar
+                        </button>
+                        <button 
+                          class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm delete-post-btn"
+                          data-post-id={post.id}
+                          data-post-title={post.title}
+                        >
+                          Eliminar
+                        </button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- Posts Tab -->
-        <div id="content-posts" class="tab-content hidden">
-          <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-900">
-              Gestión de Posts
-            </h3>
-            <button
-              id="create-post-btn"
-              class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
-              style="display: none;"
-            >
-              Crear Post
-            </button>
-          </div>
-
-          <!-- Posts List -->
-          <div class="bg-white shadow overflow-hidden sm:rounded-md">
-            <div class="px-4 py-5 sm:p-6">
-              <div class="space-y-4" id="admin-posts-list">
-                {posts.map((post) => (
-                  <div class="border border-gray-200 rounded-lg p-4 flex items-start space-x-4" data-post-id={post.id}>
-                    <div class="flex-1">
-                      <h4 class="text-lg font-semibold text-gray-900 mb-2">
-                        <a 
-                          href={`/${post.slug}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="text-blue-600 hover:text-blue-800 hover:underline"
-                        >
-                          {post.title}
-                        </a>
-                      </h4>
-                           <p class="text-gray-600 text-sm mb-2">
-                             Fecha: {formatDateToSpanish(post.date)}
-                           </p>
-                      <p class="text-gray-600 text-sm mb-2">
-                        Slug: {post.slug}
-                      </p>
-                      <p class="text-gray-500 text-sm">
-                        {post.content.substring(0, 100)}...
-                      </p>
-                    </div>
-                    <div class="flex space-x-2">
-                      <button 
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm edit-post-btn"
-                        data-post-id={post.id}
-                      >
-                        Editar
-                      </button>
-                      <button 
-                        class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm delete-post-btn admin-only"
-                        data-post-id={post.id}
-                        data-post-title={post.title}
-                        title="Solo disponible para administradores"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       </section>
     </main>
 
-    <!-- Post Editor Modal -->
-    <div id="post-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
-      <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
-          <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <h3 class="text-xl font-semibold text-gray-900" id="modal-title">
-              Crear Nuevo Post
-            </h3>
-            <button id="close-modal" class="text-gray-400 hover:text-gray-600">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
-          
-          <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-            <form id="post-form" class="space-y-6">
-              <input type="hidden" id="post-id" name="postId" />
-              
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label for="post-title" class="block text-sm font-medium text-gray-700 mb-2">
-                    Título del Post
-                  </label>
-                  <input
-                    type="text"
-                    id="post-title"
-                    name="title"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Ingresa el título del post"
-                  />
-                </div>
-                
-                <div>
-                  <label for="post-slug" class="block text-sm font-medium text-gray-700 mb-2">
-                    Slug (URL)
-                  </label>
-                  <input
-                    type="text"
-                    id="post-slug"
-                    name="slug"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="torneo-septiembre-2022"
-                  />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label for="post-date" class="block text-sm font-medium text-gray-700 mb-2">
-                    Fecha
-                  </label>
-                  <input
-                    type="date"
-                    id="post-date"
-                    name="date"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-                
-                <div>
-                  <label for="post-version" class="block text-sm font-medium text-gray-700 mb-2">
-                    Versión
-                  </label>
-                  <input
-                    type="text"
-                    id="post-version"
-                    name="version"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="v1.0"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label for="post-content" class="block text-sm font-medium text-gray-700 mb-2">
-                  Contenido (Markdown)
-                </label>
-                <textarea
-                  id="post-content"
-                  name="content"
-                  rows="15"
-                  required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
-                  placeholder="Escribe el contenido del post en Markdown..."
-                ></textarea>
-                <p class="text-sm text-gray-500 mt-2">
-                  Puedes usar Markdown para formatear el contenido. Las imágenes se subirán automáticamente a Supabase Storage.
-                </p>
-              </div>
-
-                   <div>
-                     <label for="post-featured-image" class="block text-sm font-medium text-gray-700 mb-2">
-                       <span id="featured-image-label">Imagen de Portada</span>
-                       <span id="featured-image-optional" class="text-gray-500">(requerida)</span>
-                     </label>
-                     <input
-                       type="file"
-                       id="post-featured-image"
-                       name="featured_image"
-                       accept="image/*"
-                       required
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                     />
-                     <div id="featured-image-preview" class="mt-2 hidden">
-                       <p class="text-xs text-gray-500 mb-1">Imagen actual:</p>
-                       <img id="preview-img" class="w-32 h-20 object-cover rounded border" alt="Preview" />
-                     </div>
-                     <div id="featured-image-upload-preview" class="mt-2 hidden">
-                       <p class="text-xs text-gray-500 mb-1">Nueva imagen seleccionada:</p>
-                       <img id="upload-preview-img" class="w-32 h-20 object-cover rounded border" alt="Upload Preview" />
-                     </div>
-                     <p class="text-sm text-gray-500 mt-2">
-                       <span id="featured-image-help">Selecciona una imagen para la portada del post</span>
-                     </p>
-                   </div>
-            </form>
-          </div>
-          
-          <div class="flex items-center justify-end space-x-3 p-6 border-t border-gray-200">
-            <button
-              type="button"
-              id="cancel-modal"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              id="save-post"
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors"
-            >
-              Guardar Post
-            </button>
-          </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 border-t border-gray-700 py-8 mt-auto">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center">
+          <a
+            class="inline-flex items-center text-gray-300 hover:text-white transition-all text-lg"
+            href="https://gonza.gr"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            💻 🧉 Desarrollado por Gonza
+          </a>
+          <span class="text-gray-300 text-lg">
+            Córdoba, Argentina 🇦🇷
+          </span>
         </div>
       </div>
-    </div>
+    </footer>
 
     <!-- Tournament Modal -->
     <div id="tournament-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
@@ -546,694 +418,330 @@ const posts = await getAllPosts();
         </div>
       </div>
     </div>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 border-t border-gray-700 py-8 mt-auto">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center">
-          <a
-            class="inline-flex items-center text-gray-300 hover:text-white transition-all text-lg"
-            href="https://gonza.gr"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            💻 🧉 Desarrollado por Gonza
-          </a>
-          <span class="text-gray-300 text-lg">
-            Córdoba, Argentina 🇦🇷
-          </span>
-        </div>
-      </div>
-    </footer>
   </div>
 </Layout>
 
-<script is:inline>
-  // Esperar a que el DOM esté cargado
-  document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM cargado, inicializando admin...');
-    
-    // Contraseñas (en producción estas deberían venir del servidor)
-    const ADMIN_PASSWORD = 'admin123';
-    const EDITOR_PASSWORD = 'editor123';
-    const COLEGA_PASSWORD = 'colega123';
-    const SUPABASE_URL = 'https://placeholder.supabase.co';
-    
-    // Función para obtener URL de imagen desde Supabase Storage
-    function getImageUrl(imagePath) {
-      if (!imagePath) return '';
-      
-      // Si ya es una URL completa, devolverla tal como está
-      if (imagePath.startsWith('http')) {
-        return imagePath;
-      }
-      
-      // Si es una ruta local, convertirla a URL de Supabase Storage
-      const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
-      const bucketName = 'post-images';
-      
-      return `${SUPABASE_URL}/storage/v1/object/public/${bucketName}/${cleanPath}`;
-    }
-
-    // Authentication using environment variables for different roles
-    
-    let currentUserRole = null;
-    
-    const loginForm = document.getElementById('admin-login-form');
-    console.log('Formulario encontrado:', loginForm);
-    
-    loginForm.addEventListener('submit', function(e) {
-      console.log('Formulario enviado, contraseña:', document.getElementById('password').value);
-      e.preventDefault();
-      
-      const password = document.getElementById('password').value;
+<script define:vars={{ 
+  ADMIN_PASSWORD: process.env.CHESS_ADMIN_PASSWORD || 'admin123',
+  EDITOR_PASSWORD: process.env.CHESS_EDITOR_PASSWORD || 'editor123',
+  COLEGA_PASSWORD: process.env.CHESS_COLEGA_PASSWORD || 'colega123'
+}}>
+  // Las contraseñas ahora vienen de las variables de entorno
+  
+  // Función simple de login
+  function handleLogin() {
+    const password = document.getElementById('password').value;
     const errorMessage = document.getElementById('error-message');
     const adminPanel = document.getElementById('admin-panel');
-    
-    // Check role based on password
-    console.log('Contraseñas configuradas:', {
-      ADMIN_PASSWORD,
-      EDITOR_PASSWORD, 
-      COLEGA_PASSWORD,
-      passwordEntered: password
-    });
+    const loginSection = document.getElementById('admin-login');
     
     if (password === ADMIN_PASSWORD) {
-      currentUserRole = 'admin';
       adminPanel.classList.remove('hidden');
-      this.closest('section').classList.add('hidden');
-      updateUIForRole(currentUserRole);
+      loginSection.classList.add('hidden');
+      
+      // Inicializar funcionalidad de admin
+      initializeAdminPanel();
     } else if (password === EDITOR_PASSWORD) {
-      currentUserRole = 'editor';
-      adminPanel.classList.remove('hidden');
-      this.closest('section').classList.add('hidden');
-      updateUIForRole(currentUserRole);
+      window.location.href = '/editor';
     } else if (password === COLEGA_PASSWORD) {
-      currentUserRole = 'colega';
-      adminPanel.classList.remove('hidden');
-      this.closest('section').classList.add('hidden');
-      updateUIForRole(currentUserRole);
+      window.location.href = '/colega';
     } else {
       errorMessage.classList.remove('hidden');
       setTimeout(() => {
         errorMessage.classList.add('hidden');
       }, 3000);
     }
-  });
-  
-  function updateUIForRole(role) {
-    const title = document.querySelector('h1');
-    const createTournamentBtn = document.getElementById('create-tournament-btn');
-    const createPostBtn = document.getElementById('create-post-btn');
-    
-    // Ocultar/mostrar botones de eliminar basado en el rol
-    const deleteButtons = document.querySelectorAll('.delete-post-btn');
-    deleteButtons.forEach(btn => {
-      btn.style.display = role === 'admin' ? 'block' : 'none';
-    });
-    
-    switch(role) {
-      case 'admin':
-        title.textContent = 'Ajedrez FAMAF - Admin';
-        createTournamentBtn.style.display = 'block';
-        createPostBtn.style.display = 'block';
-        break;
-      case 'editor':
-        title.textContent = 'Ajedrez FAMAF - Editor';
-        createTournamentBtn.style.display = 'none';
-        createPostBtn.style.display = 'block';
-        break;
-      case 'colega':
-        title.textContent = 'Ajedrez FAMAF - Colega';
-        createTournamentBtn.style.display = 'block';
-        createPostBtn.style.display = 'none';
-        // Redirect to colega page with admin privileges
-        window.location.href = '/colega?admin=true';
-        break;
-    }
   }
-
-  // Tab functionality
-  const tabButtons = document.querySelectorAll('.tab-button');
-  const tabContents = document.querySelectorAll('.tab-content');
-
-  tabButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      // Remove active class from all buttons
-      tabButtons.forEach(btn => {
-        btn.classList.remove('active', 'border-blue-500', 'text-blue-600');
-        btn.classList.add('border-transparent', 'text-gray-500');
-      });
-      
-      // Add active class to clicked button
-      this.classList.add('active', 'border-blue-500', 'text-blue-600');
-      this.classList.remove('border-transparent', 'text-gray-500');
-      
-      // Hide all tab contents
-      tabContents.forEach(content => {
-        content.classList.add('hidden');
-      });
-      
-      // Show corresponding tab content
-      const tabId = this.id.replace('tab-', 'content-');
-      document.getElementById(tabId).classList.remove('hidden');
-    });
-  });
-
-  // Create buttons functionality
-  document.getElementById('create-tournament-btn').addEventListener('click', function() {
-    document.getElementById('tournament-modal-title').textContent = 'Crear Nuevo Torneo';
-    document.getElementById('tournament-form').reset();
-    document.getElementById('tournament-id').value = '';
-    document.getElementById('tournament-modal').classList.remove('hidden');
-  });
-
-  document.getElementById('create-post-btn').addEventListener('click', function() {
-    modalTitle.textContent = 'Crear Nuevo Post';
-    postForm.reset();
-    document.getElementById('post-id').value = '';
+  
+  // Función para inicializar el panel de admin
+  function initializeAdminPanel() {
     
-    // Resetear imagen de portada
-    const featuredImageInput = document.getElementById('post-featured-image');
-    const featuredImagePreview = document.getElementById('featured-image-preview');
-    const uploadPreview = document.getElementById('featured-image-upload-preview');
-    const featuredImageOptional = document.getElementById('featured-image-optional');
-    const featuredImageHelp = document.getElementById('featured-image-help');
-    
-    featuredImageInput.value = '';
-    featuredImageInput.dataset.currentImage = '';
-    featuredImagePreview.classList.add('hidden');
-    uploadPreview.classList.add('hidden');
-    featuredImageOptional.textContent = '(requerida)';
-    featuredImageHelp.textContent = 'Selecciona una imagen para la portada del post';
-    
-    modal.classList.remove('hidden');
-  });
+    // Tab functionality
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-  // Delete post functionality
-  document.addEventListener('click', async function(e) {
-    if (e.target.classList.contains('delete-post-btn')) {
-      const postId = e.target.dataset.postId;
-      const postTitle = e.target.dataset.postTitle;
-      
-      if (confirm(`¿Estás seguro de que quieres eliminar el post "${postTitle}"? Esta acción no se puede deshacer.`)) {
-        try {
-          const response = await fetch(`/api/posts/${postId}`, {
-            method: 'DELETE'
-          });
-
-          if (response.ok) {
-            // Remove the post element from the DOM
-            const postElement = document.querySelector(`[data-post-id="${postId}"]`);
-            if (postElement) {
-              postElement.remove();
-            }
-            alert('Post eliminado exitosamente');
-          } else {
-            throw new Error('Error al eliminar el post');
-          }
-        } catch (error) {
-          console.error('Error:', error);
-          alert('Error al eliminar el post. Intenta nuevamente.');
-        }
-      }
-    }
-  });
-
-  // Modal functionality
-  const modal = document.getElementById('post-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const postForm = document.getElementById('post-form');
-  const closeModal = document.getElementById('close-modal');
-  const cancelModal = document.getElementById('cancel-modal');
-
-  // Close modal
-  [closeModal, cancelModal].forEach(btn => {
-    btn.addEventListener('click', function() {
-      modal.classList.add('hidden');
-    });
-  });
-
-  // Close modal when clicking outside
-  modal.addEventListener('click', function(e) {
-    if (e.target === modal) {
-      modal.classList.add('hidden');
-    }
-  });
-
-  // Edit post functionality
-  document.addEventListener('click', async function(e) {
-    if (e.target.classList.contains('edit-post-btn')) {
-      const postId = e.target.dataset.postId;
-      
-      try {
-        // Show loading state
-        modalTitle.textContent = 'Cargando...';
-        modal.classList.remove('hidden');
-        
-        // Fetch post data
-        const response = await fetch(`/api/posts/${postId}`);
-        
-        if (response.ok) {
-          const post = await response.json();
-          
-          // Fill form with existing data
-          document.getElementById('post-id').value = post.id;
-          document.getElementById('post-title').value = post.title;
-          document.getElementById('post-slug').value = post.slug;
-          
-          // Convert date to YYYY-MM-DD format for date input
-          let dateValue = '';
-          console.log('Original date from post:', post.date, 'Type:', typeof post.date);
-          
-          if (typeof post.date === 'string') {
-            // Check if it's already in YYYY-MM-DD format
-            if (/^\d{4}-\d{2}-\d{2}$/.test(post.date)) {
-              dateValue = post.date;
-              console.log('Date already in correct format:', dateValue);
-            } else {
-              // Try to parse the date string
-              try {
-                const dateObj = new Date(post.date);
-                if (!isNaN(dateObj.getTime())) {
-                  dateValue = dateObj.toISOString().split('T')[0];
-                  console.log('Parsed date:', dateValue);
-                } else {
-                  console.warn('Invalid date object:', post.date);
-                  // Use today's date as fallback
-                  dateValue = new Date().toISOString().split('T')[0];
-                }
-              } catch (error) {
-                console.error('Error parsing date:', error);
-                // Use today's date as fallback
-                dateValue = new Date().toISOString().split('T')[0];
-              }
-            }
-          } else {
-            console.warn('Date is not a string:', post.date);
-            // Use today's date as fallback
-            dateValue = new Date().toISOString().split('T')[0];
-          }
-          
-          console.log('Final date value:', dateValue);
-          document.getElementById('post-date').value = dateValue;
-          
-          document.getElementById('post-version').value = post.version;
-          document.getElementById('post-content').value = post.content;
-          
-          // Manejar imagen de portada
-          const featuredImageInput = document.getElementById('post-featured-image');
-          const featuredImagePreview = document.getElementById('featured-image-preview');
-          const previewImg = document.getElementById('preview-img');
-          const featuredImageOptional = document.getElementById('featured-image-optional');
-          const featuredImageHelp = document.getElementById('featured-image-help');
-          
-          // Limpiar input de archivo
-          featuredImageInput.value = '';
-          
-          if (post.featured_image) {
-            // Guardar la imagen actual en un data attribute para referencia
-            featuredImageInput.dataset.currentImage = post.featured_image;
-            previewImg.src = getImageUrl(post.featured_image);
-            featuredImagePreview.classList.remove('hidden');
-            featuredImageOptional.textContent = '(opcional)';
-            featuredImageHelp.textContent = 'Actualizar imagen de portada (opcional)';
-          } else {
-            featuredImageInput.dataset.currentImage = '';
-            featuredImagePreview.classList.add('hidden');
-            featuredImageOptional.textContent = '(requerida)';
-            featuredImageHelp.textContent = 'Selecciona una imagen para la portada del post';
-          }
-          
-          modalTitle.textContent = 'Editar Post';
-        } else {
-          throw new Error('Error al cargar el post');
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        modal.classList.add('hidden');
-        alert('Error al cargar el post. Intenta nuevamente.');
-      }
-    }
-  });
-
-  // Save post functionality
-  document.getElementById('save-post').addEventListener('click', async function() {
-    const formData = new FormData(postForm);
-    const postId = document.getElementById('post-id').value;
-    const isEditing = postId !== '';
-    const imageFile = document.getElementById('post-featured-image').files[0];
-
-    // Si es un post nuevo, la imagen es obligatoria
-    if (!isEditing && !imageFile) {
-      alert('Por favor selecciona una imagen de portada para el post');
-      return;
-    }
-
-    let featuredImagePath = '';
-
-    // Si hay una imagen nueva, subirla primero
-    if (imageFile) {
-      try {
-        const uploadFormData = new FormData();
-        uploadFormData.append('image', imageFile);
-        
-        const uploadResponse = await fetch('/api/upload-image', {
-          method: 'POST',
-          body: uploadFormData
+    tabButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        // Remove active class from all buttons
+        tabButtons.forEach(btn => {
+          btn.classList.remove('active', 'border-blue-500', 'text-blue-600');
+          btn.classList.add('border-transparent', 'text-gray-500');
         });
         
-        if (!uploadResponse.ok) {
-          throw new Error('Error al subir la imagen');
+        // Add active class to clicked button
+        this.classList.add('active', 'border-blue-500', 'text-blue-600');
+        this.classList.remove('border-transparent', 'text-gray-500');
+        
+        // Hide all tab contents
+        tabContents.forEach(content => {
+          content.classList.add('hidden');
+        });
+        
+        // Show corresponding tab content
+        const tabId = this.id.replace('tab-', 'content-');
+        document.getElementById(tabId).classList.remove('hidden');
+        
+        // Load tournaments when switching to tournaments tab
+        if (tabId === 'content-torneos') {
+          loadTournaments();
+        }
+      });
+    });
+
+    // Tournament modal functionality
+    const tournamentModal = document.getElementById('tournament-modal');
+    const tournamentModalTitle = document.getElementById('tournament-modal-title');
+    const tournamentForm = document.getElementById('tournament-form');
+    const closeTournamentModal = document.getElementById('close-tournament-modal');
+    const cancelTournamentBtn = document.getElementById('cancel-tournament-btn');
+
+    function openTournamentModal() {
+      tournamentModal.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+
+    function closeTournamentModalFn() {
+      tournamentModal.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+      tournamentForm.reset();
+      document.getElementById('tournament-id').value = '';
+    }
+
+    closeTournamentModal.addEventListener('click', closeTournamentModalFn);
+    cancelTournamentBtn.addEventListener('click', closeTournamentModalFn);
+
+    // Close modal when clicking outside
+    tournamentModal.addEventListener('click', function(e) {
+      if (e.target === tournamentModal) {
+        closeTournamentModalFn();
+      }
+    });
+
+    // Create tournament button
+    document.getElementById('create-tournament-btn').addEventListener('click', function() {
+      tournamentModalTitle.textContent = 'Crear Nuevo Torneo';
+      tournamentForm.reset();
+      document.getElementById('tournament-id').value = '';
+      openTournamentModal();
+    });
+
+    // Load tournaments from API
+    async function loadTournaments() {
+      try {
+        const response = await fetch('/api/tournaments');
+        if (!response.ok) {
+          throw new Error('Error al cargar torneos');
         }
         
-        const uploadResult = await uploadResponse.json();
-        featuredImagePath = uploadResult.fileName;
-        console.log('Imagen subida:', featuredImagePath);
+        const tournaments = await response.json();
+        displayTournaments(tournaments);
       } catch (error) {
-        console.error('Error subiendo imagen:', error);
-        alert('Error al subir la imagen. Intenta nuevamente.');
+        console.error('Error loading tournaments:', error);
+        document.getElementById('tournaments-list').innerHTML = `
+          <div class="text-center py-8">
+            <p class="text-red-500">Error al cargar torneos: ${error.message}</p>
+            <button onclick="loadTournaments()" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg">
+              Reintentar
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // Display tournaments in the list
+    function displayTournaments(tournaments) {
+      const tournamentsList = document.getElementById('tournaments-list');
+      
+      if (tournaments.length === 0) {
+        tournamentsList.innerHTML = `
+          <div class="text-center py-8">
+            <p class="text-gray-500">No hay torneos creados aún.</p>
+          </div>
+        `;
         return;
       }
-    }
 
-    const postData = {
-      title: formData.get('title'),
-      slug: formData.get('slug'),
-      date: formData.get('date'),
-      version: formData.get('version'),
-      content: formData.get('content'),
-      featured_image: featuredImagePath || (isEditing ? document.getElementById('post-featured-image').dataset.currentImage : '')
-    };
+      tournamentsList.innerHTML = tournaments.map(tournament => {
+        const statusColors = {
+          'upcoming': 'bg-blue-500',
+          'active': 'bg-green-500',
+          'completed': 'bg-gray-500',
+          'cancelled': 'bg-red-500'
+        };
 
-    // Validar slug reservado en frontend
-    const reservedSlugs = ['torneos', 'admin', 'editor', 'colega']
-    if (reservedSlugs.includes(postData.slug.toLowerCase())) {
-      alert('Error: Este slug está reservado para rutas del sistema. Por favor usa otro slug.');
-      return;
-    }
+        const statusLabels = {
+          'upcoming': 'Próximo',
+          'active': 'Activo',
+          'completed': 'Finalizado',
+          'cancelled': 'Cancelado'
+        };
 
-    try {
-      // Show loading state
-      this.textContent = 'Guardando...';
-      this.disabled = true;
-
-      // Create or update post
-      const url = '/api/posts' + (isEditing ? `/${postId}` : '');
-      const method = isEditing ? 'PUT' : 'POST';
-      
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(postData)
-      });
-
-      if (response.ok) {
-        // Success - reload the page to show updated posts
-        window.location.reload();
-      } else {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al guardar el post');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error al guardar el post: ' + error.message);
-    } finally {
-      this.textContent = 'Guardar Post';
-      this.disabled = false;
-    }
-  });
-
-  // Preview de imagen cuando se selecciona un archivo
-  document.getElementById('post-featured-image').addEventListener('change', function(e) {
-    const file = e.target.files[0];
-    const uploadPreview = document.getElementById('featured-image-upload-preview');
-    const uploadPreviewImg = document.getElementById('upload-preview-img');
-    
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        uploadPreviewImg.src = e.target.result;
-        uploadPreview.classList.remove('hidden');
-      };
-      reader.readAsDataURL(file);
-    } else {
-      uploadPreview.classList.add('hidden');
-    }
-  });
-
-  // ===== TOURNAMENT FUNCTIONALITY =====
-  
-  // Tournament modal elements
-  const tournamentModal = document.getElementById('tournament-modal');
-  const tournamentModalTitle = document.getElementById('tournament-modal-title');
-  const tournamentForm = document.getElementById('tournament-form');
-  const closeTournamentModal = document.getElementById('close-tournament-modal');
-  const cancelTournamentBtn = document.getElementById('cancel-tournament-btn');
-
-  // Tournament modal functionality
-  function openTournamentModal() {
-    tournamentModal.classList.remove('hidden');
-    document.body.classList.add('overflow-hidden');
-  }
-
-  function closeTournamentModal() {
-    tournamentModal.classList.add('hidden');
-    document.body.classList.remove('overflow-hidden');
-    tournamentForm.reset();
-    document.getElementById('tournament-id').value = '';
-  }
-
-  closeTournamentModal.addEventListener('click', closeTournamentModal);
-  cancelTournamentBtn.addEventListener('click', closeTournamentModal);
-
-  // Close modal when clicking outside
-  tournamentModal.addEventListener('click', function(e) {
-    if (e.target === tournamentModal) {
-      closeTournamentModal();
-    }
-  });
-
-  // Load tournaments from API
-  async function loadTournaments() {
-    try {
-      const response = await fetch('/api/tournaments');
-      if (!response.ok) {
-        throw new Error('Error al cargar torneos');
-      }
-      
-      const tournaments = await response.json();
-      displayTournaments(tournaments);
-    } catch (error) {
-      console.error('Error loading tournaments:', error);
-      document.getElementById('tournaments-list').innerHTML = `
-        <div class="text-center py-8">
-          <p class="text-red-500">Error al cargar torneos: ${error.message}</p>
-          <button onclick="loadTournaments()" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg">
-            Reintentar
-          </button>
-        </div>
-      `;
-    }
-  }
-
-  // Display tournaments in the list
-  function displayTournaments(tournaments) {
-    const tournamentsList = document.getElementById('tournaments-list');
-    
-    if (tournaments.length === 0) {
-      tournamentsList.innerHTML = `
-        <div class="text-center py-8">
-          <p class="text-gray-500">No hay torneos creados aún.</p>
-        </div>
-      `;
-      return;
-    }
-
-    tournamentsList.innerHTML = tournaments.map(tournament => {
-      const statusColors = {
-        'upcoming': 'bg-blue-500',
-        'active': 'bg-green-500',
-        'completed': 'bg-gray-500',
-        'cancelled': 'bg-red-500'
-      };
-
-      const statusLabels = {
-        'upcoming': 'Próximo',
-        'active': 'Activo',
-        'completed': 'Finalizado',
-        'cancelled': 'Cancelado'
-      };
-
-      return `
-        <div class="border border-gray-200 rounded-lg p-4" data-tournament-id="${tournament.id}">
-          <div class="flex justify-between items-start mb-4">
-            <span class="px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[tournament.status]}">
-              ${statusLabels[tournament.status]}
-            </span>
-            <div class="flex space-x-2">
-              <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm edit-tournament-btn" data-tournament-id="${tournament.id}">
-                Editar
-              </button>
-              <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm delete-tournament-btn admin-only" data-tournament-id="${tournament.id}" data-tournament-name="${tournament.name}">
-                Eliminar
-              </button>
+        return `
+          <div class="border border-gray-200 rounded-lg p-4" data-tournament-id="${tournament.id}">
+            <div class="flex justify-between items-start mb-4">
+              <span class="px-3 py-1 rounded-full text-xs font-medium text-white ${statusColors[tournament.status]}">
+                ${statusLabels[tournament.status]}
+              </span>
+              <div class="flex space-x-2">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm edit-tournament-btn" data-tournament-id="${tournament.id}">
+                  Editar
+                </button>
+                <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm delete-tournament-btn" data-tournament-id="${tournament.id}" data-tournament-name="${tournament.name}">
+                  Eliminar
+                </button>
+              </div>
             </div>
+            <h4 class="text-lg font-semibold text-gray-900 mb-2">${tournament.name}</h4>
+            <div class="space-y-2 text-sm text-gray-600">
+              <p>📅 ${tournament.start_date} - ${tournament.start_time}</p>
+              <p>👥 ${tournament.max_players} jugadores</p>
+              <p>📍 ${tournament.location}</p>
+              <p>💰 $${tournament.cost}</p>
+              <p>🎯 Sistema: ${tournament.system}</p>
+              <p>⏱️ ${tournament.time_per_player} min por jugador</p>
+            </div>
+            <p class="text-gray-700 mt-3">${tournament.description}</p>
           </div>
-          <h4 class="text-lg font-semibold text-gray-900 mb-2">${tournament.name}</h4>
-          <div class="space-y-2 text-sm text-gray-600">
-            <p>📅 ${formatDateToSpanish(tournament.start_date)} - ${tournament.start_time}</p>
-            <p>👥 ${tournament.max_players} jugadores</p>
-            <p>📍 ${tournament.location}</p>
-            <p>💰 $${tournament.cost}</p>
-            <p>🎯 Sistema: ${tournament.system}</p>
-            <p>⏱️ ${tournament.time_per_player} min por jugador</p>
-          </div>
-          <p class="text-gray-700 mt-3">${tournament.description}</p>
-        </div>
-      `;
-    }).join('');
-  }
-
-  // Save tournament functionality
-  document.getElementById('save-tournament-btn').addEventListener('click', async function() {
-    const formData = new FormData(tournamentForm);
-    const tournamentId = document.getElementById('tournament-id').value;
-    const isEditing = tournamentId !== '';
-
-    const tournamentData = {
-      name: formData.get('name'),
-      description: formData.get('description'),
-      max_players: formData.get('max_players'),
-      system: formData.get('system'),
-      time_per_player: formData.get('time_per_player'),
-      start_date: formData.get('start_date'),
-      start_time: formData.get('start_time'),
-      location: formData.get('location'),
-      prizes: formData.get('prizes') || '',
-      cost: formData.get('cost')
-    };
-
-    try {
-      this.textContent = 'Guardando...';
-      this.disabled = true;
-
-      const method = isEditing ? 'PUT' : 'POST';
-      const url = isEditing ? `/api/tournaments/${tournamentId}` : '/api/tournaments';
-      
-      const response = await fetch(url, {
-        method: method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(tournamentData),
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Error al guardar el torneo');
-      }
-      
-      alert('Torneo guardado correctamente!');
-      closeTournamentModal();
-      loadTournaments(); // Reload tournaments list
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Error al guardar el torneo: ' + error.message);
-    } finally {
-      this.textContent = 'Guardar Torneo';
-      this.disabled = false;
+        `;
+      }).join('');
     }
-  });
 
-  // Edit tournament functionality
-  document.addEventListener('click', async function(e) {
-    if (e.target.classList.contains('edit-tournament-btn')) {
-      const tournamentId = e.target.dataset.tournamentId;
-      
+    // Save tournament functionality
+    document.getElementById('save-tournament-btn').addEventListener('click', async function() {
+      const formData = new FormData(tournamentForm);
+      const tournamentId = document.getElementById('tournament-id').value;
+      const isEditing = tournamentId !== '';
+
+      const tournamentData = {
+        name: formData.get('name'),
+        description: formData.get('description'),
+        max_players: formData.get('max_players'),
+        system: formData.get('system'),
+        time_per_player: formData.get('time_per_player'),
+        start_date: formData.get('start_date'),
+        start_time: formData.get('start_time'),
+        location: formData.get('location'),
+        prizes: formData.get('prizes') || '',
+        cost: formData.get('cost')
+      };
+
       try {
-        tournamentModalTitle.textContent = 'Cargando...';
-        openTournamentModal();
+        this.textContent = 'Guardando...';
+        this.disabled = true;
 
-        const response = await fetch(`/api/tournaments/${tournamentId}`);
+        const method = isEditing ? 'PUT' : 'POST';
+        const url = isEditing ? `/api/tournaments/${tournamentId}` : '/api/tournaments';
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(tournamentData),
+        });
+        
         if (!response.ok) {
-          throw new Error(`Error al cargar el torneo: ${response.status}`);
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al guardar el torneo');
         }
         
-        const tournament = await response.json();
-        
-        // Fill form with existing data
-        document.getElementById('tournament-id').value = tournament.id;
-        document.getElementById('tournament-name').value = tournament.name;
-        document.getElementById('tournament-description').value = tournament.description;
-        document.getElementById('tournament-max-players').value = tournament.max_players;
-        document.getElementById('tournament-system').value = tournament.system;
-        document.getElementById('tournament-time').value = tournament.time_per_player;
-        document.getElementById('tournament-date').value = tournament.start_date;
-        document.getElementById('tournament-time-start').value = tournament.start_time;
-        document.getElementById('tournament-location').value = tournament.location;
-        document.getElementById('tournament-cost').value = tournament.cost;
-        document.getElementById('tournament-prizes').value = tournament.prizes || '';
-        
-        tournamentModalTitle.textContent = 'Editar Torneo';
+        alert('Torneo guardado correctamente!');
+        closeTournamentModalFn();
+        loadTournaments(); // Reload tournaments list
       } catch (error) {
         console.error('Error:', error);
-        alert('Error al cargar el torneo. Intenta nuevamente.');
-        closeTournamentModal();
+        alert('Error al guardar el torneo: ' + error.message);
+      } finally {
+        this.textContent = 'Guardar Torneo';
+        this.disabled = false;
       }
-    }
-  });
+    });
 
-  // Delete tournament functionality
-  document.addEventListener('click', async function(e) {
-    if (e.target.classList.contains('delete-tournament-btn')) {
-      const tournamentId = e.target.dataset.tournamentId;
-      const tournamentName = e.target.dataset.tournamentName;
-
-      if (confirm(`¿Estás seguro de que quieres eliminar el torneo "${tournamentName}"?`)) {
+    // Edit tournament functionality
+    document.addEventListener('click', async function(e) {
+      if (e.target.classList.contains('edit-tournament-btn')) {
+        const tournamentId = e.target.dataset.tournamentId;
+        
         try {
-          const response = await fetch(`/api/tournaments/${tournamentId}`, {
-            method: 'DELETE',
-          });
+          tournamentModalTitle.textContent = 'Cargando...';
+          openTournamentModal();
 
+          const response = await fetch(`/api/tournaments/${tournamentId}`);
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Error al eliminar el torneo');
+            throw new Error(`Error al cargar el torneo: ${response.status}`);
           }
-
-          alert('Torneo eliminado correctamente!');
-          loadTournaments(); // Reload tournaments list
+          
+          const tournament = await response.json();
+          
+          // Fill form with existing data
+          document.getElementById('tournament-id').value = tournament.id;
+          document.getElementById('tournament-name').value = tournament.name;
+          document.getElementById('tournament-description').value = tournament.description;
+          document.getElementById('tournament-max-players').value = tournament.max_players;
+          document.getElementById('tournament-system').value = tournament.system;
+          document.getElementById('tournament-time').value = tournament.time_per_player;
+          document.getElementById('tournament-date').value = tournament.start_date;
+          document.getElementById('tournament-time-start').value = tournament.start_time;
+          document.getElementById('tournament-location').value = tournament.location;
+          document.getElementById('tournament-cost').value = tournament.cost;
+          document.getElementById('tournament-prizes').value = tournament.prizes || '';
+          
+          tournamentModalTitle.textContent = 'Editar Torneo';
         } catch (error) {
           console.error('Error:', error);
-          alert('Error al eliminar el torneo: ' + error.message);
+          alert('Error al cargar el torneo. Intenta nuevamente.');
+          closeTournamentModalFn();
         }
       }
+    });
+
+    // Delete tournament functionality
+    document.addEventListener('click', async function(e) {
+      if (e.target.classList.contains('delete-tournament-btn')) {
+        const tournamentId = e.target.dataset.tournamentId;
+        const tournamentName = e.target.dataset.tournamentName;
+
+        if (confirm(`¿Estás seguro de que quieres eliminar el torneo "${tournamentName}"?`)) {
+          try {
+            const response = await fetch(`/api/tournaments/${tournamentId}`, {
+              method: 'DELETE',
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.error || 'Error al eliminar el torneo');
+            }
+
+            alert('Torneo eliminado correctamente!');
+            loadTournaments(); // Reload tournaments list
+          } catch (error) {
+            console.error('Error:', error);
+            alert('Error al eliminar el torneo: ' + error.message);
+          }
+        }
+      }
+    });
+
+    // Load tournaments initially
+    loadTournaments();
+  }
+  
+  // Esperar a que el DOM esté listo
+  document.addEventListener('DOMContentLoaded', function() {
+    // Agregar event listener al formulario
+    const form = document.getElementById('admin-login-form');
+    
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleLogin();
+      });
     }
   });
-
-  // Load tournaments when admin panel is shown
-  document.getElementById('admin-panel').addEventListener('DOMNodeInserted', function() {
-    if (currentUserRole === 'admin') {
-      loadTournaments();
-    }
-  });
-
-  // Also load tournaments when switching to tournaments tab
-  document.getElementById('tab-torneos').addEventListener('click', function() {
-    if (currentUserRole === 'admin') {
-      loadTournaments();
-    }
-  });
-
-  }); // End DOMContentLoaded
-
 </script>
 
 <style>
   .tab-button.active {
     @apply border-blue-500 text-blue-600;
   }
-  
 </style>
