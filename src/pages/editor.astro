@@ -569,7 +569,7 @@ const posts = await getAllPosts();
     };
 
     // Validar slug reservado en frontend
-    const reservedSlugs = ['torneos', 'admin', 'editor', 'colega']
+    const reservedSlugs = ['admin', 'editor']
     if (reservedSlugs.includes(postData.slug.toLowerCase())) {
       alert('Error: Este slug está reservado para rutas del sistema. Por favor usa otro slug.');
       return;
