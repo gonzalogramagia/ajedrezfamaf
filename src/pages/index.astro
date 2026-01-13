@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import StaticHero from '../components/StaticHero.astro';
 import InstagramFloatingButton from '../components/InstagramFloatingButton.astro';
+import GithubFloatingButton from '../components/GithubFloatingButton.astro';
 import Badge from '../components/Badge.astro';
 import Authors from '../components/Authors.astro';
 import { getAllPosts } from '../lib/posts';
@@ -40,6 +41,7 @@ const posts = await getAllPosts();
   <main class="min-h-screen relative">
     <StaticHero />
     <InstagramFloatingButton />
+    <GithubFloatingButton />
     <section
       class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden"
     >
@@ -82,14 +84,9 @@ const posts = await getAllPosts();
     <!-- Footer con Gonza -->
     <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
       <div class="text-center">
-        <a
-          class="inline-flex items-center text-yellow-500 hover:shadow-text transition-all text-lg"
-          href="https://gonza.gr"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          💻 🧉 Desarrollado por Gonza
-        </a>
+        <p class="inline-flex items-center text-yellow-500 text-lg font-semibold">
+          © 2026 | Mens sana in corpore sano
+        </p>
       </div>
     </section>
   </main>
