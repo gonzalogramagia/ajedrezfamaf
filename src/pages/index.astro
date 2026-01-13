@@ -42,44 +42,46 @@ const posts = await getAllPosts();
     <StaticHero />
     <InstagramFloatingButton />
     <GithubFloatingButton />
-    <section
-      class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden"
-    >
-      {posts.map((post) => (
-        <article class="md:flex">
-                 <h2 class="content-date h-full mt-px">
-                   <a href="#2022-06-23">{formatDateToSpanish(post.date)}</a>
-                 </h2>
-          <div class="content-block">
-            <div class="feed-border"></div>
-            <div class="feed-dot"></div>
-            <div class="mb-6">
-              <Badge label={post.version} />
-            </div>
-            <h1 class="text-xl sm:text-3xl font-bold mb-4">
-              <a 
-                href={`/${post.slug || '#'}`}
-                class="hover:text-primary transition-colors"
-              >
-                {post.title}
-              </a>
-            </h1>
-            <div class="document" set:html={parseMarkdown(post.content, `/${post.slug || '#'}`)} />
-            {post.featured_image && (
-              <div class="mt-6">
-                <a href={`/${post.slug || '#'}`}>
-                  <img 
-                    src={getImageUrl(post.featured_image)} 
-                    alt={post.title}
-                    class="w-full h-96 md:h-[32rem] object-cover rounded-lg hover:opacity-90 transition-opacity"
-                  />
-                </a>
+    <div class="lg:pr-32">
+      <section
+        class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden"
+      >
+        {posts.map((post) => (
+          <article class="md:flex">
+                  <h2 class="content-date h-full mt-px">
+                    <a href="#2022-06-23">{formatDateToSpanish(post.date)}</a>
+                  </h2>
+            <div class="content-block">
+              <div class="feed-border"></div>
+              <div class="feed-dot"></div>
+              <div class="mb-6">
+                <Badge label={post.version} />
               </div>
-            )}
-          </div>
-        </article>
-      ))}
-    </section>
+              <h1 class="text-xl sm:text-3xl font-bold mb-4">
+                <a 
+                  href={`/${post.slug || '#'}`}
+                  class="hover:text-primary transition-colors"
+                >
+                  {post.title}
+                </a>
+              </h1>
+              <div class="document" set:html={parseMarkdown(post.content, `/${post.slug || '#'}`)} />
+              {post.featured_image && (
+                <div class="mt-6">
+                  <a href={`/${post.slug || '#'}`}>
+                    <img 
+                      src={getImageUrl(post.featured_image)} 
+                      alt={post.title}
+                      class="w-full h-96 md:h-[32rem] object-cover rounded-lg hover:opacity-90 transition-opacity"
+                    />
+                  </a>
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </section>
+    </div>
     
     <!-- Footer con Gonza -->
     <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-8">
