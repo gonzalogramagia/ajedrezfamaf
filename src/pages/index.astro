@@ -41,51 +41,69 @@ const posts = await getAllPosts();
   <main class="min-h-screen relative">
     <StaticHero />
     <InstagramFloatingButton />
-    <GithubFloatingButton />
-    <div class="lg:pr-56">
-      <section
-        class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden"
-      >
-        {posts.map((post) => (
-          <article class="md:flex">
-                  <h2 class="content-date h-full mt-px">
-                    <a href="#2022-06-23">{formatDateToSpanish(post.date)}</a>
+    <GithubFloatingButton mobileVisible={posts.length === 0} />
+    {posts.length > 0 ? (
+      <div class="lg:pr-56">
+        <section
+          class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 overflow-hidden"
+        >
+          <div class="grid gap-12 lg:gap-16">
+            {posts.map((post) => (
+              <article class="md:flex">
+                <div class="md:w-3/4 md:pr-12 lg:pr-56"> 
+                  <div class="flex items-center gap-4 text-sm text-gray-500 mb-2">
+                    <time datetime={post.date} class="font-medium text-primary">
+                      {formatDateToSpanish(post.date)}
+                    </time>
+                    <div class="w-1 h-1 rounded-full bg-gray-300"></div>
+                    {post.version && (
+                      <Badge label={post.version} />
+                    )}
+                  </div>
+                  
+                  <h2 class="text-2xl font-bold text-gray-900 mb-3 hover:text-primary transition-colors">
+                    <a href={`/${post.slug}`} class="block">
+                      {post.title}
+                    </a>
                   </h2>
-            <div class="content-block">
-              <div class="feed-border"></div>
-              <div class="feed-dot"></div>
-              <div class="mb-6">
-                <Badge label={post.version} />
-              </div>
-              <h1 class="text-xl sm:text-3xl font-bold mb-4">
-                <a 
-                  href={`/${post.slug || '#'}`}
-                  class="hover:text-primary transition-colors"
-                >
-                  {post.title}
-                </a>
-              </h1>
-              <div class="document" set:html={parseMarkdown(post.content, `/${post.slug || '#'}`)} />
-              {post.featured_image && (
-                <div class="mt-6">
-                  <a href={`/${post.slug || '#'}`}>
-                    <img 
-                      src={getImageUrl(post.featured_image)} 
-                      alt={post.title}
-                      class="w-full h-96 md:h-[32rem] object-cover rounded-lg hover:opacity-90 transition-opacity"
-                    />
-                  </a>
+                  
+                  <p class="text-gray-600 leading-relaxed mb-4 line-clamp-3">
+                    {post.excerpt || post.content.substring(0, 150) + '...'}
+                  </p>
+                  
+                  <div class="flex items-center pt-2">
+                    <a 
+                      href={`/${post.slug}`}
+                      class="inline-flex items-center text-primary font-semibold hover:text-secondary transition-colors group"
+                    >
+                      Leer artículo
+                      <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                      </svg>
+                    </a>
+                  </div>
                 </div>
-              )}
-            </div>
-          </article>
-        ))}
-      </section>
-    </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
+    ) : (
+      <div class="flex flex-col items-center justify-center pt-0 pb-48 text-center container mx-auto px-4">
+        <div class="bg-orange-50 rounded-full p-4 mb-4">
+          <svg class="w-12 h-12 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+        </div>
+        <p class="text-gray-600 max-w-md mx-auto">
+          No se pudieron cargar las noticias. Por favor, verifica tu conexión o intenta nuevamente más tarde.
+        </p>
+      </div>
+    )}
     
     <!-- Footer con Gonza -->
     <section class="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 pt-8 pb-10 md:py-8">
-      <div class="text-left md:text-center pl-6 md:pl-0">
+      <div class:list={["md:text-center md:pl-0", { "text-center": posts.length === 0, "text-left pl-6": posts.length > 0 }]}>
         <p class="inline-flex items-center text-yellow-500 text-lg font-semibold">
           © 2026 | Mens sana in corpore sano
         </p>

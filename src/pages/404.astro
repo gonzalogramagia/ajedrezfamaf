@@ -1,0 +1,48 @@
+---
+import Layout from '../layouts/Layout.astro';
+import StaticHeader from '../components/StaticHeader.astro';
+import GithubFloatingButton from '../components/GithubFloatingButton.astro';
+import InstagramFloatingButton from '../components/InstagramFloatingButton.astro';
+---
+
+<Layout title="404 - Página no encontrada" description="La página que buscas no existe.">
+  <main class="min-h-screen flex flex-col bg-white relative">
+    <InstagramFloatingButton />
+    <GithubFloatingButton mobileVisible={true} />
+    
+    <StaticHeader />
+    
+    <div class="flex-grow flex flex-col items-center justify-center px-4 text-center pt-0 pb-40">
+      <h1 class="text-9xl font-bold text-gray-200 mb-4 select-none">404</h1>
+      
+      <div class="space-y-6 max-w-lg">
+        <h2 class="text-3xl font-bold text-secondary">
+          ¡Movimiento Ilegal!
+        </h2>
+        
+        <p class="text-lg text-gray-600">
+          Parece que la página que buscas no está en el tablero. 
+          Al igual que en el ajedrez, a veces hay que retroceder para encontrar el mejor camino.
+        </p>
+        
+        <div class="pt-8">
+          <a 
+            href="/" 
+            class="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-white bg-primary rounded-lg hover:bg-opacity-90 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+          >
+            Volver al inicio
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <section class="w-full pb-10">
+      <div class="text-center">
+        <p class="inline-flex items-center text-yellow-500 text-lg font-semibold">
+          © 2026 | Mens sana in corpore sano
+        </p>
+      </div>
+    </section>
+  </main>
+</Layout>
