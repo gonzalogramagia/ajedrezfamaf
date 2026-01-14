@@ -1,7 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import StaticHeader from '../components/StaticHeader.astro';
+import StaticHeader from '../components/StaticHeader.astro';
 import InstagramFloatingButton from '../components/InstagramFloatingButton.astro';
+import GithubFloatingButton from '../components/GithubFloatingButton.astro';
 import Badge from '../components/Badge.astro';
 import Authors from '../components/Authors.astro';
 import { getAllPosts } from '../lib/posts';
@@ -52,6 +54,7 @@ function formatDateToSpanish(dateString: string): string {
 <Layout title={`${post.title} - Ajedrez FAMAF`} description={post.title}>
   <main class="post-main">
     <InstagramFloatingButton />
+    <GithubFloatingButton />
     
     <StaticHeader />
     
@@ -113,16 +116,11 @@ function formatDateToSpanish(dateString: string): string {
     </div>
     
     <!-- Footer con Gonza -->
-    <section class="post-footer-section">
-      <div class="post-footer-content">
-        <a
-          class="gonza-link"
-          href="https://gonza.gr"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          💻 🧉 Desarrollado por Gonza
-        </a>
+    <section class="post-footer-section pt-10 pb-12 md:py-8">
+      <div class="post-footer-content text-left md:text-center">
+        <p class="inline-flex items-center text-yellow-500 text-lg font-semibold">
+          © 2026 | Mens sana in corpore sano
+        </p>
       </div>
     </section>
   </main>
@@ -321,6 +319,12 @@ function formatDateToSpanish(dateString: string): string {
     justify-content: space-between;
   }
 
+  @media (max-width: 639px) {
+    .post-footer .copy-button {
+      display: none;
+    }
+  }
+
   .back-link {
     display: inline-flex;
     align-items: center;
@@ -389,7 +393,7 @@ function formatDateToSpanish(dateString: string): string {
   }
 
   .post-footer-content {
-    text-align: center;
+    /* text-align managed by utility classes */
   }
 
   .gonza-link {
