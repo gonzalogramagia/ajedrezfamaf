@@ -24,6 +24,7 @@ export interface Post {
   content: string
   slug: string
   featured_image?: string
+  excerpt?: string
   created_at: string
   updated_at: string
 }
