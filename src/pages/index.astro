@@ -62,9 +62,15 @@ const posts = await getAllPosts();
                 </div>
                 
                 <div class="md:w-3/4 md:pl-8 md:border-l md:border-gray-100 relative pb-12">
-                  <div class="absolute -left-[6.5px] top-2.5 hidden md:block w-3 h-3 rounded-full border-2 border-white bg-gray-200 group-hover:bg-orange-500 transition-colors"></div>
+                  <div class="absolute -left-[6.5px] top-2.5 hidden md:block w-3 h-3 rounded-full border-2 border-white bg-gray-200 group-hover:bg-black transition-colors"></div>
                   
-                  <div class="flex items-center gap-4 text-sm text-gray-500 mb-2 md:hidden">
+                  <h2 class="text-2xl font-bold text-gray-900 mb-2 hover:text-primary transition-colors">
+                    <a href={`/${post.slug}`} class="block">
+                      {post.title}
+                    </a>
+                  </h2>
+
+                  <div class="flex items-center gap-4 text-sm text-gray-500 mb-3 md:hidden">
                     <time datetime={post.date} class="font-medium text-orange-500 text-base">
                       {formatDateToSpanish(post.date)}
                     </time>
@@ -73,12 +79,6 @@ const posts = await getAllPosts();
                       <Badge label={new Date(post.date).getFullYear().toString()} />
                     )}
                   </div>
-                  
-                  <h2 class="text-2xl font-bold text-gray-900 mb-3 hover:text-primary transition-colors">
-                    <a href={`/${post.slug}`} class="block">
-                      {post.title}
-                    </a>
-                  </h2>
 
                   {post.featured_image && (
                     <a href={`/${post.slug}`} class="block mb-4 overflow-hidden rounded-lg">

@@ -31,28 +31,7 @@ Podemos probar:
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       },
-      {
-        id: 'hardcoded-2',
-        title: 'Torneo de Septiembre',
-        date: new Date(Date.now() - 86400000 * 5).toISOString(), // 5 days ago
-        version: '0.9.0',
-        content: `
-¡Se viene el torneo de septiembre!
 
-![Torneo](/torneo-22-sept.png)
-
-No te pierdas la oportunidad de participar en nuestro próximo torneo.
-- **Fecha:** 22 de Septiembre
-- **Lugar:** FAMAF
-- **Inscripción:** Gratuita
-
-¡Te esperamos!
-`,
-        slug: 'torneo-septiembre',
-        featured_image: '/torneo-22-sept.png',
-        created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-        updated_at: new Date(Date.now() - 86400000 * 5).toISOString()
-      }
     ]
   }
 
