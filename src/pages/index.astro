@@ -38,7 +38,12 @@ const posts = await getAllPosts();
 ---
 
 <Layout title={seoConfig.title} description={seoConfig.description}>
-  <main class="min-h-screen relative">
+  <main 
+    class="min-h-screen relative" 
+    style="background-image: url('/wallpaper.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+  >
+    <div style="position: absolute; inset: 0; background-color: white; opacity: 0.95; pointer-events: none;"></div>
+    <div class="relative z-10">
     <StaticHero />
     <InstagramFloatingButton />
     <GithubFloatingButton mobileVisible={posts.length === 0} />
@@ -130,5 +135,6 @@ const posts = await getAllPosts();
         </p>
       </div>
     </section>
+    </div>
   </main>
 </Layout>

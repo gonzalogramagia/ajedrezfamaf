@@ -52,7 +52,12 @@ function formatDateToSpanish(dateString: string): string {
 ---
 
 <Layout title={`${post.title} - Ajedrez FAMAF`} description={post.title}>
-  <main class="post-main">
+  <main 
+    class="post-main" 
+    style="background-image: url('/wallpaper.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+  >
+    <div style="position: absolute; inset: 0; background-color: white; opacity: 0.95; pointer-events: none;"></div>
+    <div class="relative z-10">
     <InstagramFloatingButton />
     <GithubFloatingButton />
     
@@ -123,6 +128,7 @@ function formatDateToSpanish(dateString: string): string {
         </p>
       </div>
     </section>
+    </div>
   </main>
 </Layout>
 
