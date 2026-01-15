@@ -9,6 +9,7 @@ import Authors from '../components/Authors.astro';
 import { getAllPosts } from '../lib/posts';
 import { parseMarkdown } from '../lib/markdown';
 import { getImageUrl } from '../lib/storage';
+import wallpaper from '../assets/wallpaper.png';
 
 export async function getStaticPaths() {
   const posts = await getAllPosts();
@@ -54,7 +55,7 @@ function formatDateToSpanish(dateString: string): string {
 <Layout title={`${post.title} - Ajedrez FAMAF`} description={post.title}>
   <main 
     class="post-main" 
-    style="background-image: url('/wallpaper.png'); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"
+    style={`background-image: url(${wallpaper.src}); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed;`}
   >
     <div style="position: absolute; inset: 0; background-color: white; opacity: 0.95; pointer-events: none;"></div>
     <div class="relative z-10">
